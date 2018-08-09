@@ -56,7 +56,6 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
                private String emailInput,passwordInput;
 
-
             @Override
             public void onClick(View v) {
                  emailInput = edtEmail.getText().toString();
