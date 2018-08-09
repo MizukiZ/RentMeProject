@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Button btnLogin, btnCancel;
     EditText edtEmail, edtPassword;
+    TextView noAccountLink;
 
     // Firebase
     // database
@@ -41,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         // init views
+        noAccountLink = findViewById(R.id.noAccountLink);
         btnCancel = findViewById(R.id.btnCancel);
         btnLogin = findViewById(R.id.btnLogin);
         edtEmail = findViewById(R.id.edtEmail);
@@ -51,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance();
         users = db.getReference("Users");
 
+        // set click evnet
+         // login
         btnLogin.setOnClickListener(new View.OnClickListener() {
             private String emailInput,passwordInput;
             @Override
@@ -78,6 +83,16 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
+            }
+        });
+
+         // no account link
+        noAccountLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // when the text is clicked, jump to register page
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                finish();
             }
         });
 
