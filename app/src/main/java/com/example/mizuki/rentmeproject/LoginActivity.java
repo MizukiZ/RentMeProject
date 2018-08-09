@@ -1,6 +1,7 @@
 package com.example.mizuki.rentmeproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -64,7 +65,10 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(AuthResult authResult) {
                                 // successfully login
-                                Log.d("Login test", "Login!!");
+
+                                // redirect to home page
+                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
