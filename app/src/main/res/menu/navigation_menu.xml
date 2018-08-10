@@ -3,11 +3,11 @@
  <!--this page is style of the drawar menu-->
     <item android:id="@+id/itemPost"
         android:icon="@drawable/account"
-        android:title="My Account"/>
+        android:title="New Post"/>
 
     <item android:id="@+id/itemAccount"
         android:icon="@drawable/post"
-        android:title="New Post"/>
+        android:title="Account"/>
 
     <item android:id="@+id/itemMessageBox"
         android:icon="@drawable/message"

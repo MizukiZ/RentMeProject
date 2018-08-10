@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/postCamera"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@android:drawable/ic_menu_camera"
+            />
+
+        <EditText
+            android:id="@+id/postTitle"
+            android:hint="Title"
+            android:inputType="textEmailAddress"
+            android:text=""
+            android:textColorHint="@color/hintText"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+
+        <EditText
+            android:id="@+id/postPrice"
+            android:hint="Price(per night)"
+            android:inputType="textEmailAddress"
+            android:text=""
+            android:textColorHint="@color/hintText"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <EditText
+            android:id="@+id/postLocation"
+            android:hint="Location"
+            android:inputType="textPostalAddress"
+            android:text=""
+            android:textColorHint="@color/hintText"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <EditText
+            android:id="@+id/postCategory"
+            android:hint="Category"
+            android:inputType="textPassword"
+            android:text=""
+            android:textColorHint="@color/hintText"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <EditText
+            android:id="@+id/postDescription"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:text=""
+            android:textColorHint="@color/hintText"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:lines="5"
+            android:scrollbars="vertical"
+            />
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Post this item" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

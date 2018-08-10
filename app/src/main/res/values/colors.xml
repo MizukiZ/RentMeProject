@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="toolbar">#89C8F6</color>
     <color name="appBackGround">#FFFFFF</color>
+    <color name="hintText">#C4C4C4</color>
 </resources>
+
+

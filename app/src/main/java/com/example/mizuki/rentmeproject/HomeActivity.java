@@ -44,21 +44,33 @@ public class HomeActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.itemPost:
+                        //  redirect to new post page
+                        startActivity(new Intent(HomeActivity.this, PostActivity.class));
+                        return true;
 
                         case R.id.itemAccount:
+                            Toast.makeText(HomeActivity.this, "Account",Toast.LENGTH_SHORT).show();
+                            return true;
 
                     case R.id.itemMessageBox:
+                        Toast.makeText(HomeActivity.this, "MessageBox",Toast.LENGTH_SHORT).show();
+                        return true;
 
                     case R.id.itemPostbox:
+                        Toast.makeText(HomeActivity.this, "Postbox",Toast.LENGTH_SHORT).show();
+                        return true;
 
                     case R.id.itemHelp:
+                        Toast.makeText(HomeActivity.this, "Help",Toast.LENGTH_SHORT).show();
+                        return true;
 
                             case R.id.itemLogout:
-                                // when logout is clicked sign out form firebase auth
+//                                 when logout is clicked sign out form firebase auth
                                 FirebaseAuth.getInstance().signOut();
                                 // redirect to login page
                                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
                                  finish();
+                                return true;
 
                                 default:
                                     return true;
