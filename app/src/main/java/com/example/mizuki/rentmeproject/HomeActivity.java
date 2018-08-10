@@ -59,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
                                 // redirect to login page
                                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
                                  finish();
+
                                 default:
                                     return true;
                                     }

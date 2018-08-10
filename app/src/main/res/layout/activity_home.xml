@@ -5,7 +5,8 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_green_dark">
+    android:background="@android:color/holo_green_dark"
+   >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,12 +26,14 @@
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
+        android:id="@+id/nv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:menu="@menu/navigation_menu"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        android:id="@+id/nv">
+
+        >
 
     </android.support.design.widget.NavigationView>
 

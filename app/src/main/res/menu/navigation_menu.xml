@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+ <!--this page is style of the drawar menu-->
     <item android:id="@+id/itemPost"
-        android:icon="@android:drawable/ic_partial_secure"
+        android:icon="@drawable/account"
         android:title="My Account"/>
 
     <item android:id="@+id/itemAccount"
-        android:icon="@android:drawable/ic_partial_secure"
+        android:icon="@drawable/post"
         android:title="New Post"/>
 
     <item android:id="@+id/itemMessageBox"
-        android:icon="@android:drawable/ic_partial_secure"
+        android:icon="@drawable/message"
         android:title="Message Box"/>
 
     <item android:id="@+id/itemPostbox"
-        android:icon="@android:drawable/ic_partial_secure"
+        android:icon="@drawable/box"
         android:title="Settings"/>
 
     <item android:id="@+id/itemHelp"
-        android:icon="@android:drawable/ic_partial_secure"
+        android:icon="@drawable/help"
         android:title="Help"/>
 
     <item android:id="@+id/itemLogout"
-        android:icon="@android:drawable/ic_partial_secure"
+        android:icon="@drawable/logout"
         android:title="Logout"/>
 
 </menu>
