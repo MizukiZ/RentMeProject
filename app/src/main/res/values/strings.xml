@@ -2,4 +2,13 @@
     <string name="app_name">RentMeProject</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+
+    <string-array name="category_array">
+        <item>Sport</item>
+        <item>Appliance</item>
+        <item>Instrument</item>
+        <item>Clothe</item>
+        <item>Tools</item>
+        <item>Ride</item>
+    </string-array>
 </resources>
