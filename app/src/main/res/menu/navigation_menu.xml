@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/itemPost"
+        android:icon="@android:drawable/ic_partial_secure"
+        android:title="My Account"/>
+
+    <item android:id="@+id/itemAccount"
+        android:icon="@android:drawable/ic_partial_secure"
+        android:title="New Post"/>
+
+    <item android:id="@+id/itemMessageBox"
+        android:icon="@android:drawable/ic_partial_secure"
+        android:title="Message Box"/>
+
+    <item android:id="@+id/itemPostbox"
+        android:icon="@android:drawable/ic_partial_secure"
+        android:title="Settings"/>
+
+    <item android:id="@+id/itemHelp"
+        android:icon="@android:drawable/ic_partial_secure"
+        android:title="Help"/>
+
+    <item android:id="@+id/itemLogout"
+        android:icon="@android:drawable/ic_partial_secure"
+        android:title="Logout"/>
+
+</menu>
