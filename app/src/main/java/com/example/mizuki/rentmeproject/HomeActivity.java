@@ -4,12 +4,15 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.activity_main);
         navigationView = findViewById(R.id.nv);
         toolbar =  findViewById(R.id.toolbar);
+
 
         setSupportActionBar(toolbar);
 
@@ -94,6 +98,38 @@ public class HomeActivity extends AppCompatActivity {
             return true;
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Menu init
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // get searchview menu file and set to menu
+        getMenuInflater().inflate(R.menu.searchview_menu, menu);
+
+        // activate search item
+        MenuItem searchItem = menu.findItem(R.id.itemSearch);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        // set hint text
+        searchView.setQueryHint("Search items");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // when user submit the text
+                Toast.makeText(HomeActivity.this, query,Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // when user inputs text
+                return false;
+            }
+        });
+
+        return true;
     }
 
 
