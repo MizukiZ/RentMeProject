@@ -33,6 +33,12 @@
             android:layout_marginTop="200dp"
             android:layout_marginLeft="130dp"/>
 
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/testImage"
+            android:layout_marginTop="260dp"
+            android:layout_marginLeft="130dp"/>
 
     </RelativeLayout>
 

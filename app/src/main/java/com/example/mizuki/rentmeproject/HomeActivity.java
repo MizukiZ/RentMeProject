@@ -13,9 +13,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import Model.Post;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -23,6 +32,10 @@ public class HomeActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
     private Toolbar toolbar;
+
+    private ImageView testImage;
+
+    private DatabaseReference db;
 
 
     @Override
@@ -34,7 +47,10 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.activity_main);
         navigationView = findViewById(R.id.nv);
         toolbar =  findViewById(R.id.toolbar);
+        testImage = findViewById(R.id.testImage);
 
+        // firebase
+        db = FirebaseDatabase.getInstance().getReference();
 
         setSupportActionBar(toolbar);
 
@@ -86,6 +102,21 @@ public class HomeActivity extends AppCompatActivity {
                                 default:
                                     return true;
                                     }
+            }
+        });
+
+        // Attach a listener to read the data
+        db.child("Post").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+              //  testing
+//                 String imgPath = dataSnapshot.child("img").getValue().toString();
+//                Picasso.get().load(imgPath).into(testImage);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
             }
         });
 

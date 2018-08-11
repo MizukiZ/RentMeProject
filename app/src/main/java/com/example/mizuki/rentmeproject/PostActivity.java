@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,14 +35,16 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+import Model.Post;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class PostActivity extends AppCompatActivity {
 
-    private EditText postLocation;
-    private ImageView postCamera, uploadPhoto;
-    private Button btnSubmit;
+    EditText postLocation,postTitle,postCost,postDescription;
+    ImageView postCamera, uploadPhoto;
+    Button btnSubmit;
+    Spinner postCategory;
 
     static final int AUTO_COMP_REQ_CODE = 1;
     static final int REQUEST_IMAGE_CAPTURE = 11;
@@ -50,8 +54,10 @@ public class PostActivity extends AppCompatActivity {
 
 
     //Firebase
-    FirebaseStorage storage;
-    StorageReference storageReference;
+     FirebaseStorage storage;
+     StorageReference storageReference;
+     DatabaseReference db;
+     DatabaseReference postRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +65,20 @@ public class PostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post);
 
         // init views
+        postTitle = findViewById(R.id.postTitle);
+        postCost = findViewById(R.id.postPrice);
+        postDescription = findViewById(R.id.postDescription);
         postLocation = findViewById(R.id.postLocation);
         postCamera = findViewById(R.id.postCamera);
         uploadPhoto = findViewById(R.id.uploadPhoto);
         btnSubmit = findViewById(R.id.btnPost);
+        postCategory = findViewById(R.id.category_spinner);
 
         // firebase
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        db = FirebaseDatabase.getInstance().getReference();
+        postRef = db.child("Post");
 
         // camera click event
         postCamera.setOnClickListener(new View.OnClickListener() {
@@ -108,20 +120,8 @@ public class PostActivity extends AppCompatActivity {
                 if(resultCode == RESULT_OK) {
                     Place place = PlaceAutocomplete.getPlace(this, data);
                     CharSequence location = place.getAddress().toString();
-
                     postLocation.setText(location);
                     break;
-                }
-                break;
-            case REQUEST_IMAGE_CAPTURE:
-                // get result for taking photo intent
-                if(resultCode == RESULT_OK) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                Log.e("Image upload", imageBitmap.toString());
-                uploadPhoto.setImageBitmap(imageBitmap);
-
-                break;
                 }
                 break;
                  default:
@@ -160,13 +160,26 @@ public class PostActivity extends AppCompatActivity {
         }
     }
 
-    // submit finction
+    // submit function
     public void submit(){
-        // give a unique ID to the image
+        // get unique post id
+        final String postId = postRef.push().getKey();
+
+        // get each value form the form
+        final String title = postTitle.getText().toString();
+        final String category = postCategory.getSelectedItem().toString();
+        final String description = postDescription.getText().toString();
+        final Double cost = Double.parseDouble(postCost.getText().toString());
+        final String location = postLocation.getText().toString();
+        final String userId = "test";
+
+        // give a unique ID for the image
         final StorageReference ref = storageReference.child("ItemImages/"+ UUID.randomUUID().toString());
+
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         imgBit.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        // data for uploading to firebase storage
         imgData = baos.toByteArray();
 
 
@@ -184,7 +197,38 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
-                    Uri downloadUri = task.getResult();
+                    // image url for database
+                    String downloadUri = task.getResult().toString();
+
+                    // create new post object to ues user class
+                    Post post = new Post(
+                            postId,
+                            title,
+                            description,
+                            downloadUri,
+                            location,
+                            category,
+                            userId,
+                            cost
+                    );
+
+                    postRef.child(postId).setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // success handle
+                            Toast.makeText(PostActivity.this, "posted!!", Toast.LENGTH_SHORT).show();
+
+                            // redirect to Main
+                            startActivity(new Intent(PostActivity.this, HomeActivity.class));
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // fail
+                            Toast.makeText(PostActivity.this, "post failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
                 } else {

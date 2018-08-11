@@ -2,19 +2,19 @@ package Model;
 
 public class Post {
 
-    private String id,title,description,image,location,category_id,user_id;
+    private String id,title,description,image,location,category,user_id;
     private Double cost;
 
     public Post() {
     }
 
-    public Post(String id, String title, String description, String image, String location, String category_id, String user_id, Double cost) {
+    public Post(String id, String title, String description, String image, String location, String category, String user_id, Double cost) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.image = image;
         this.location = location;
-        this.category_id = category_id;
+        this.category = category;
         this.user_id = user_id;
         this.cost = cost;
     }
@@ -60,11 +60,11 @@ public class Post {
     }
 
     public String getCategory_id() {
-        return category_id;
+        return category;
     }
 
-    public void setCategory_id(String category_id) {
-        this.category_id = category_id;
+    public void setCategory_id(String category) {
+        this.category = category;
     }
 
     public String getUser_id() {
