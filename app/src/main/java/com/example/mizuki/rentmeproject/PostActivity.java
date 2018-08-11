@@ -1,16 +1,17 @@
 package com.example.mizuki.rentmeproject;
 
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.UUID;
 
 import Model.Post;
+import dmax.dialog.SpotsDialog;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -45,6 +47,8 @@ public class PostActivity extends AppCompatActivity {
     ImageView postCamera, uploadPhoto;
     Button btnSubmit;
     Spinner postCategory;
+
+    android.app.AlertDialog postingDialog;
 
     static final int AUTO_COMP_REQ_CODE = 1;
     static final int REQUEST_IMAGE_CAPTURE = 11;
@@ -59,6 +63,7 @@ public class PostActivity extends AppCompatActivity {
      DatabaseReference db;
      DatabaseReference postRef;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +85,7 @@ public class PostActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance().getReference();
         postRef = db.child("Post");
 
+
         // camera click event
         postCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,10 +98,12 @@ public class PostActivity extends AppCompatActivity {
 
 
          // location field click event
-        postLocation.setOnClickListener(new View.OnClickListener() {
+        postLocation.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                autoCompleteForm();
+            public boolean onTouch(View v, MotionEvent event) {
+                if(MotionEvent.ACTION_UP == event.getAction())
+                    autoCompleteForm();
+                return false;
             }
         });
 
@@ -103,6 +111,14 @@ public class PostActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // make progress dialog and show
+                postingDialog = new SpotsDialog.Builder().setContext(PostActivity.this)
+                        .setMessage("Posting")
+                        .build();
+
+                postingDialog.show();
+
                 // when user click post button
                 submit();
             }
@@ -216,6 +232,10 @@ public class PostActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             // success handle
+
+                            // dismiss dialog
+                            postingDialog.dismiss();
+
                             Toast.makeText(PostActivity.this, "posted!!", Toast.LENGTH_SHORT).show();
 
                             // redirect to Main
@@ -226,6 +246,10 @@ public class PostActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             // fail
+
+                            // dissmiss dialog
+                            postingDialog.dismiss();
+
                             Toast.makeText(PostActivity.this, "post failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
