@@ -3,8 +3,7 @@
     package="com.example.mizuki.rentmeproject">
 
     <!--check if users device has got a camera-->
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"

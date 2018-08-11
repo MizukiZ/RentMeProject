@@ -2,6 +2,7 @@ package com.example.mizuki.rentmeproject;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+
+import java.io.File;
+import java.util.List;
+
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -39,11 +46,8 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // when user click the camera image
-                 // open the intent for taking photo
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
+                 // open the intent for easyImage library
+                EasyImage.openChooserWithGallery(PostActivity.this, "Choose Photo", 0);
             }
         });
 
@@ -87,6 +91,27 @@ public class PostActivity extends AppCompatActivity {
                  default:
                     break;
         }
+
+        //  get result from easy image library intent
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                //error handling
+                Log.e("Error", e.getStackTrace().toString());
+            }
+
+            @Override
+            public void onImagesPicked(List<File> imagesFiles, EasyImage.ImageSource source, int type) {
+                //Handle the images
+                // get first file from the file list
+               File photo = imagesFiles.get(0);
+               // convert the file to bit data
+               Bitmap myBitmap = BitmapFactory.decodeFile(photo.getAbsolutePath());
+               // set to the view
+               uploadPhoto.setImageBitmap(myBitmap);
+
+            }
+        });
     }
 
     //  call google auto complete apt
