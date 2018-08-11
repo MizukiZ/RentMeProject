@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
+    private Toolbar toolbar;
 
 
     @Override
@@ -28,12 +30,17 @@ public class HomeActivity extends AppCompatActivity {
         // init view
         drawerLayout = findViewById(R.id.activity_main);
         navigationView = findViewById(R.id.nv);
+        toolbar =  findViewById(R.id.toolbar);
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,R.string.open, R.string.close);
+        setSupportActionBar(toolbar);
+
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar,R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        actionBarDrawerToggle.syncState();
 
 
         // click event for the navigation items
