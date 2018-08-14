@@ -187,7 +187,7 @@ public class PostActivity extends AppCompatActivity {
         final String description = postDescription.getText().toString();
         final Double cost = Double.parseDouble(postCost.getText().toString());
         final String location = postLocation.getText().toString();
-        final String userId = "test";
+        final String userId = "test"; // need to get current user id
 
         // give a unique ID for the image
         final StorageReference ref = storageReference.child("ItemImages/"+ UUID.randomUUID().toString());
@@ -225,7 +225,8 @@ public class PostActivity extends AppCompatActivity {
                             location,
                             category,
                             userId,
-                            cost
+                            cost,
+                            false
                     );
 
                     postRef.child(postId).setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {

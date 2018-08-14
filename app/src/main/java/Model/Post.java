@@ -4,11 +4,12 @@ public class Post {
 
     private String id,title,description,image,location,category,user_id;
     private Double cost;
+    boolean isRented;
 
     public Post() {
     }
 
-    public Post(String id, String title, String description, String image, String location, String category, String user_id, Double cost) {
+    public Post(String id, String title, String description, String image, String location, String category, String user_id, Double cost, boolean isRented) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -17,6 +18,7 @@ public class Post {
         this.category = category;
         this.user_id = user_id;
         this.cost = cost;
+        this.isRented = isRented;
     }
 
     public String getId() {
@@ -59,11 +61,11 @@ public class Post {
         this.location = location;
     }
 
-    public String getCategory_id() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory_id(String category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
@@ -81,5 +83,13 @@ public class Post {
 
     public void setCost(Double cost) {
         this.cost = cost;
+    }
+
+    public boolean isRented() {
+        return isRented;
+    }
+
+    public void setRented(boolean rented) {
+        isRented = rented;
     }
 }
