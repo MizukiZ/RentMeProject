@@ -159,12 +159,10 @@ public class HomeActivity extends AppCompatActivity {
                         @SuppressWarnings("unchecked")
                         //get clicked view object
                         HashMap<String, String> itemObject = (HashMap<String, String>) itemListAdapter.getItem(position);
-//                        String title =  obj.get("title");
-//                        String isRented = obj.get("isRented");
-//                        String description = obj.get("description");
 
-
-                        Toast.makeText(HomeActivity.this, itemObject.toString() ,Toast.LENGTH_SHORT).show();
+                         Intent detailPageIntent = new Intent(HomeActivity.this, ItemDetailActivity.class);
+                         detailPageIntent.putExtra("itemObject",itemObject);
+                        HomeActivity.this.startActivity(detailPageIntent);
                     }
                 });
             }

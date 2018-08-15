@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mizuki.rentmeproject">
 
-    <!--check if users device has got a camera-->
+    <!-- check if users device has got a camera -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".HomeActivity">
             <intent-filter>
@@ -24,13 +24,14 @@
         </activity>
         <activity
             android:name=".PostActivity"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
 
-        <!--google api key-->
+        <!-- google api key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDT0AV7JxL3vMv2Qf0IPPU-ER8P5-OLzpM"/>
+            android:value="AIzaSyDT0AV7JxL3vMv2Qf0IPPU-ER8P5-OLzpM" />
+
+        <activity android:name=".ItemDetailActivity"></activity>
     </application>
 
 </manifest>
