@@ -1,15 +1,18 @@
 package Model;
 
+import java.security.Timestamp;
+
 public class Post {
 
     private String id,title,description,image,location,category,user_id;
     private Double cost;
-    boolean isRented;
+    private boolean rented;
+    private Object created_at,updated_at;
 
     public Post() {
     }
 
-    public Post(String id, String title, String description, String image, String location, String category, String user_id, Double cost, boolean isRented) {
+    public Post(String id, String title, String description, String image, String location, String category, String user_id, Double cost, boolean rented, Object created_at, Object updated_at) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -18,7 +21,9 @@ public class Post {
         this.category = category;
         this.user_id = user_id;
         this.cost = cost;
-        this.isRented = isRented;
+        this.rented = rented;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
     }
 
     public String getId() {
@@ -86,10 +91,26 @@ public class Post {
     }
 
     public boolean isRented() {
-        return isRented;
+        return rented;
     }
 
     public void setRented(boolean rented) {
-        isRented = rented;
+        this.rented = rented;
+    }
+
+    public Object getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Object created_at) {
+        this.created_at = created_at;
+    }
+
+    public Object getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(Object updated_at) {
+        this.updated_at = updated_at;
     }
 }
