@@ -82,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText( context, "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-
             }
         });
 

@@ -23,6 +23,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +36,7 @@ import java.util.HashMap;
 
 import Helper.ItemListAdapter;
 import Model.Post;
+import Model.User;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -44,16 +46,35 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private DatabaseReference db;
+    User currentUser;
+
+    private String userId;
 
 
     ArrayList<HashMap<String,Object>> itemListData = new ArrayList<>();
     SimpleAdapter itemListAdapter;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(currentUser != null){
+        Log.d("Userdata", currentUser.getEmail());}
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            // if no user is logged in
+
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            finish();
+        } else{
+            // if there is a current user get user ID
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
 
 
         // init view
@@ -64,6 +85,8 @@ public class HomeActivity extends AppCompatActivity {
 
         // firebase
         db = FirebaseDatabase.getInstance().getReference();
+
+
 
         // make instance of custom simple adapter and put data in
         itemListAdapter = new ItemListAdapter(this,
@@ -124,7 +147,22 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        // Attach a listener to read the data
+        // Attach a listener to read the user data
+        db.child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                // get user data by user id and store it into object
+              currentUser = dataSnapshot.child(userId).getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        // Attach a listener to read the post data
         db.child("Post").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

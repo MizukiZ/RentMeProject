@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     TextView alreadyAccountLink;
     Button btnRegister, btnCancel;
-    EditText edtEmail, edtPassword;
+    EditText edtName,edtEmail, edtPassword;
 
     // Firebase
      // database
@@ -50,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
+        edtName = findViewById(R.id.edtUserName);
 
         // init Firebase
         auth = FirebaseAuth.getInstance();
@@ -58,10 +59,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         // set click event
         btnRegister.setOnClickListener(new View.OnClickListener() {
-               private String emailInput,passwordInput;
+               private String emailInput,passwordInput,userNameInput;
 
             @Override
             public void onClick(View v) {
+                 userNameInput = edtName.getText().toString();
                  emailInput = edtEmail.getText().toString();
                  passwordInput = edtPassword.getText().toString();
 
@@ -77,6 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         // create User class
                         User newUser = new User();
+                        newUser.setUserName(userNameInput);
                         newUser.setEmail(emailInput);
                         newUser.setPassword(passwordInput);
 
@@ -87,7 +90,9 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 // created user successfully
-                                Toast.makeText( context, "Registered!!", Toast.LENGTH_LONG).show();
+                                Toast.makeText( context, "Successfully registered", Toast.LENGTH_LONG).show();
+                                // after the registration login
+                                startActivity(new Intent(context, HomeActivity.class));
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

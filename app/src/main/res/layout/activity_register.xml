@@ -21,12 +21,22 @@
             />
 
         <EditText
+            android:id="@+id/edtUserName"
+            android:hint="User name"
+            android:inputType="text"
+            android:textColorHint="@color/hintText"
+            android:text=""
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <EditText
             android:id="@+id/edtEmail"
             android:hint="Email"
             android:inputType="textEmailAddress"
+            android:textColorHint="@color/hintText"
             android:text=""
-            android:textColor="@color/colorPrimary"
-            android:textColorHint="@color/colorPrimary"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,9 +46,8 @@
             android:id="@+id/edtPassword"
             android:hint="Password"
             android:inputType="textPassword"
+            android:textColorHint="@color/hintText"
             android:text=""
-            android:textColor="@color/colorPrimary"
-            android:textColorHint="@color/colorPrimary"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
