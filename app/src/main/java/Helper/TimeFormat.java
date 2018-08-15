@@ -5,12 +5,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class timeFormat {
+public class TimeFormat {
 
     private Calendar calendar;
     private String formatData;
 
-    public  timeFormat(String timeStampA){
+    public TimeFormat(String timeStampA){
         calendar = GregorianCalendar.getInstance();
 
         Long timeStamp = Long.valueOf(timeStampA);

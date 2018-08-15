@@ -18,4 +18,28 @@
         android:gravity="center"
         />
 
+    <TextView
+        android:id="@+id/itemDetailPostDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:gravity="right"
+        />
+
+    <TextView
+        android:id="@+id/itemDetailDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/itemDetailPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="18sp" />
+
 </LinearLayout>

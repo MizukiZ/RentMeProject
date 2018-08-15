@@ -145,7 +145,10 @@ public class HomeActivity extends AppCompatActivity {
                   data.put("location", post.getLocation());
                   data.put("title", post.getTitle());
                   data.put("price", post.getCost());
-                  data.put("isRented", post.isRented());
+                  data.put("rented", post.isRented());
+                  data.put("created_at",post.getCreated_at());
+                  data.put("updated_at",post.getUpdated_at());
+                  data.put("user_id", post.getUser_id());
 
                   itemListData.add(data);
               }
@@ -156,8 +159,9 @@ public class HomeActivity extends AppCompatActivity {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        @SuppressWarnings("unchecked")
+
                         //get clicked view object
+                        @SuppressWarnings("unchecked")
                         HashMap<String, Object> itemObject = (HashMap<String, Object>) itemListAdapter.getItem(position);
 
                          Intent detailPageIntent = new Intent(HomeActivity.this, ItemDetailActivity.class);
