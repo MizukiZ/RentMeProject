@@ -32,6 +32,7 @@ public class ItemListAdapter extends SimpleAdapter {
 
         // get the url from the data the value of key "image" to the `Map`
         String url = ((Map<String, String>)getItem(position)).get("image");
+
         // Picasso setting
         Picasso.get()
                 .load(url)

@@ -2,6 +2,7 @@ package com.example.mizuki.rentmeproject;
 
 import android.content.ClipData;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -136,14 +139,34 @@ public class HomeActivity extends AppCompatActivity {
 
                   HashMap<String, String> data = new HashMap<>();
                   data.put("image", post.getImage());
+                  data.put("description", post.getDescription());
+                  data.put("id", post.getId());
+                  data.put("category", post.getCategory());
+                  data.put("location", post.getLocation());
                   data.put("title", post.getTitle());
                   data.put("price", post.getCost().toString());
+                  data.put("isRented", post.isRented() == true ? "true" : "false");
+
                   itemListData.add(data);
               }
                // set list view with the custom adapter
-                ListView listView = findViewById(R.id.listview1);
+                final ListView listView = findViewById(R.id.listview1);
                 listView.setAdapter(itemListAdapter);
 
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        @SuppressWarnings("unchecked")
+                        //get clicked view object
+                        HashMap<String, String> itemObject = (HashMap<String, String>) itemListAdapter.getItem(position);
+//                        String title =  obj.get("title");
+//                        String isRented = obj.get("isRented");
+//                        String description = obj.get("description");
+
+
+                        Toast.makeText(HomeActivity.this, itemObject.toString() ,Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
