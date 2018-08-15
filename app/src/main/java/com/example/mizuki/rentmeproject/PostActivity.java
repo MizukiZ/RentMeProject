@@ -248,7 +248,7 @@ public class PostActivity extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             // fail
 
-                            // dissmiss dialog
+                            // dismiss dialog
                             postingDialog.dismiss();
 
                             Toast.makeText(PostActivity.this, "post failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();

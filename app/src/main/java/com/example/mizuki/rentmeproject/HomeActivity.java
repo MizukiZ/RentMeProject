@@ -10,10 +10,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +27,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import Helper.ItemListAdapter;
 import Model.Post;
 
 public class HomeActivity extends AppCompatActivity {
@@ -33,9 +40,11 @@ public class HomeActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Toolbar toolbar;
 
-    private ImageView testImage;
-
     private DatabaseReference db;
+
+
+    ArrayList<HashMap<String,String>> itemListData = new ArrayList<>();
+    SimpleAdapter itemListAdapter;
 
 
     @Override
@@ -43,23 +52,30 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         // init view
         drawerLayout = findViewById(R.id.activity_main);
         navigationView = findViewById(R.id.nv);
         toolbar =  findViewById(R.id.toolbar);
-        testImage = findViewById(R.id.testImage);
+
 
         // firebase
         db = FirebaseDatabase.getInstance().getReference();
 
+        // make instance of custom simple adapter and put data in
+        itemListAdapter = new ItemListAdapter(this,
+                itemListData, // data you want to use
+                R.layout.items_card_view, // layout template
+                new String[]{"title", "price"}, // from which keys
+                new int[]{R.id.itemTitle, R.id.itemPrice}); // where to put the data
+
+        // set toolbar as actionbar(converting)
         setSupportActionBar(toolbar);
 
-
+       // set drawerToggle in toolbar
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar,R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         actionBarDrawerToggle.syncState();
 
 
@@ -109,9 +125,25 @@ public class HomeActivity extends AppCompatActivity {
         db.child("Post").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-              //  testing
-//                 String imgPath = dataSnapshot.child("img").getValue().toString();
-//                Picasso.get().load(imgPath).into(testImage);
+
+                // reset the list
+                itemListData.clear();
+
+                // loop the data to generate item list array
+              for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                  Post post = snapshot.getValue(Post.class);
+
+                  HashMap<String, String> data = new HashMap<>();
+                  data.put("image", post.getImage());
+                  data.put("title", post.getTitle());
+                  data.put("price", post.getCost().toString());
+                  itemListData.add(data);
+              }
+               // set list view with the custom adapter
+                ListView listView = findViewById(R.id.listview1);
+                listView.setAdapter(itemListAdapter);
+
             }
 
             @Override
