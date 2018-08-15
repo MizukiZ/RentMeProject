@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class ItemListAdapter extends SimpleAdapter {
 
-    public ItemListAdapter(Context context, List<? extends Map<String,String>> data, int resource, String[] from, int[] to){
+    public ItemListAdapter(Context context, List<? extends Map<String, Object>> data, int resource, String[] from, int[] to){
         super(context, data, resource, from, to);
     }
 

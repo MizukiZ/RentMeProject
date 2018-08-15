@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference db;
 
 
-    ArrayList<HashMap<String,String>> itemListData = new ArrayList<>();
+    ArrayList<HashMap<String,Object>> itemListData = new ArrayList<>();
     SimpleAdapter itemListAdapter;
 
 
@@ -137,15 +137,15 @@ public class HomeActivity extends AppCompatActivity {
 
                   Post post = snapshot.getValue(Post.class);
 
-                  HashMap<String, String> data = new HashMap<>();
+                  HashMap<String, Object> data = new HashMap<>();
                   data.put("image", post.getImage());
                   data.put("description", post.getDescription());
                   data.put("id", post.getId());
                   data.put("category", post.getCategory());
                   data.put("location", post.getLocation());
                   data.put("title", post.getTitle());
-                  data.put("price", post.getCost().toString());
-                  data.put("isRented", post.isRented() == true ? "true" : "false");
+                  data.put("price", post.getCost());
+                  data.put("isRented", post.isRented());
 
                   itemListData.add(data);
               }
@@ -158,7 +158,7 @@ public class HomeActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         @SuppressWarnings("unchecked")
                         //get clicked view object
-                        HashMap<String, String> itemObject = (HashMap<String, String>) itemListAdapter.getItem(position);
+                        HashMap<String, Object> itemObject = (HashMap<String, Object>) itemListAdapter.getItem(position);
 
                          Intent detailPageIntent = new Intent(HomeActivity.this, ItemDetailActivity.class);
                          detailPageIntent.putExtra("itemObject",itemObject);

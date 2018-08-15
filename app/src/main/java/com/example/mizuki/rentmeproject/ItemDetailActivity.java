@@ -27,13 +27,13 @@ public class ItemDetailActivity extends AppCompatActivity {
         itemTitle = findViewById(R.id.itemDetailTitle);
 
         Intent intent = getIntent();
-        HashMap<String, String> itemHashMap = (HashMap<String, String>)intent.getSerializableExtra("itemObject");
+        HashMap<String, Object> itemHashMap = (HashMap<String, Object>)intent.getSerializableExtra("itemObject");
         Picasso.get()
-                .load(itemHashMap.get("image"))
+                .load(itemHashMap.get("image").toString())
                 .resize(500,300)
                 .placeholder(R.drawable.loading_placeholder)
                 .into(itemImage);
 
-        itemTitle.setText(itemHashMap.get("title"));
+        itemTitle.setText(itemHashMap.get("title").toString());
     }
 }
