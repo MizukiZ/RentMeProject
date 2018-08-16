@@ -19,6 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import dmax.dialog.SpotsDialog;
+
 public class LoginActivity extends AppCompatActivity {
 
     Context context;
@@ -34,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
 
     //authentication
     FirebaseAuth auth;
+
+    android.app.AlertDialog loginDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,27 +69,57 @@ public class LoginActivity extends AppCompatActivity {
                 emailInput = edtEmail.getText().toString();
                 passwordInput = edtPassword.getText().toString();
 
-                auth.signInWithEmailAndPassword(emailInput,passwordInput).
-                        addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-                                // successfully login
+                if(emailInput == null || emailInput.isEmpty()){
+                    // if emil field is empty
+                    Toast.makeText( context, "Email field is empty", Toast.LENGTH_LONG).show();
 
-                                // redirect to home page
-                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                                finish();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
+                }else if(passwordInput == null || passwordInput.isEmpty()){
+                    // if password field is empty
+                    Toast.makeText( context, "Password field is empty", Toast.LENGTH_LONG).show();
+
+                }
+                else{
+                    // create registering progress dialog
+                    loginDialog = new SpotsDialog.Builder().setContext(LoginActivity.this)
+                            .setMessage("Validating")
+                            .build();
+
+                    loginDialog.show();
+
+                    login();
+                }
+
+    }
+
+    public void login(){
+        auth.signInWithEmailAndPassword(emailInput,passwordInput).
+                addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //  login failed
-                        Toast.makeText( context, "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    public void onSuccess(AuthResult authResult) {
+                        // successfully login
+
+                        loginDialog.dismiss();
+
+                        Toast.makeText( context, "Welcome", Toast.LENGTH_LONG).show();
+
+                        // redirect to home page
+                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        finish();
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+                loginDialog.dismiss();
+
+                //  login failed
+                Toast.makeText( context, "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+        });
 
-         // no account link
+        // no account link
         noAccountLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +128,6 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
+
 }
