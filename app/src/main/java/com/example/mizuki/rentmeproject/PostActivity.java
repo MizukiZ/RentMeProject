@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
@@ -188,7 +189,7 @@ public class PostActivity extends AppCompatActivity {
         final String category = postCategory.getSelectedItem().toString();
         final String description = postDescription.getText().toString();
         final String location = postLocation.getText().toString();
-        final String userId = "test"; // need to get current user id
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // give a unique ID for the image
         final StorageReference ref = storageReference.child("ItemImages/"+ UUID.randomUUID().toString());
