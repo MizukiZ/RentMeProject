@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -186,87 +187,106 @@ public class PostActivity extends AppCompatActivity {
         final String title = postTitle.getText().toString();
         final String category = postCategory.getSelectedItem().toString();
         final String description = postDescription.getText().toString();
-        final Double cost = Double.parseDouble(postCost.getText().toString());
         final String location = postLocation.getText().toString();
         final String userId = "test"; // need to get current user id
 
         // give a unique ID for the image
         final StorageReference ref = storageReference.child("ItemImages/"+ UUID.randomUUID().toString());
 
+        // empty field detection
+        if(imgBit == null){
+            // no image uploaded
+            // handle fail
+            postingDialog.dismiss();
+            Toast.makeText(PostActivity.this, "Please upload a image", Toast.LENGTH_SHORT).show();
+        } else if(
+                title == null || title.isEmpty() ||
+                        category == null || category.isEmpty() ||
+                        description == null || description.isEmpty() ||
+                        TextUtils.isEmpty(postCost.getText().toString()) ||
+                        location == null || location.isEmpty()
+                ){
+            // if there is a empty field
+            postingDialog.dismiss();
+            Toast.makeText(PostActivity.this, "Please fill ALL the field", Toast.LENGTH_SHORT).show();
+        }else {
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        imgBit.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        // data for uploading to firebase storage
-        imgData = baos.toByteArray();
+            final Double cost = Double.parseDouble(postCost.getText().toString());
+
+            // if every field is filled
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imgBit.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            // data for uploading to firebase storage
+            imgData = baos.toByteArray();
 
 
-        UploadTask uploadTask = ref.putBytes(imgData);
-        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
+            UploadTask uploadTask = ref.putBytes(imgData);
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    // return the Download url of the image
+                    return ref.getDownloadUrl();
                 }
-                // return the Download url of the image
-                return ref.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    // image url for database
-                    String downloadUri = task.getResult().toString();
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        // image url for database
+                        String downloadUri = task.getResult().toString();
 
-                    // create new post object to ues user class
-                    Post post = new Post(
-                            postId,
-                            title,
-                            description,
-                            downloadUri,
-                            location,
-                            category,
-                            userId,
-                            cost,
-                            false,
-                            ServerValue.TIMESTAMP,
-                            ServerValue.TIMESTAMP
-                    );
+                        // create new post object to ues user class
+                        Post post = new Post(
+                                postId,
+                                title,
+                                description,
+                                downloadUri,
+                                location,
+                                category,
+                                userId,
+                                cost,
+                                false,
+                                ServerValue.TIMESTAMP,
+                                ServerValue.TIMESTAMP
+                        );
 
-                    postRef.child(postId).setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // success handle
+                        postRef.child(postId).setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // success handle
 
-                            // dismiss dialog
-                            postingDialog.dismiss();
+                                // dismiss dialog
+                                postingDialog.dismiss();
 
-                            Toast.makeText(PostActivity.this, "posted!!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PostActivity.this, "posted!!", Toast.LENGTH_SHORT).show();
 
-                            // redirect to Main
-                            startActivity(new Intent(PostActivity.this, HomeActivity.class));
-                            finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // fail
+                                // redirect to Main
+                                startActivity(new Intent(PostActivity.this, HomeActivity.class));
+                                finish();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // fail
 
-                            // dismiss dialog
-                            postingDialog.dismiss();
+                                // dismiss dialog
+                                postingDialog.dismiss();
 
-                            Toast.makeText(PostActivity.this, "post failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                                Toast.makeText(PostActivity.this, "post failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
 
-                } else {
-                    // handle fail
-                    Toast.makeText(PostActivity.this, "upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        // handle fail
+                        Toast.makeText(PostActivity.this, "upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
-
-
+            });
+        }
     }
 
 
