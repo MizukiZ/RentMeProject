@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -211,10 +212,10 @@ public class PostActivity extends AppCompatActivity {
             postingDialog.dismiss();
             Toast.makeText(PostActivity.this, "Please fill ALL the field", Toast.LENGTH_SHORT).show();
         }else {
-
+            // if every field is filled
             final Double cost = Double.parseDouble(postCost.getText().toString());
 
-            // if every field is filled
+
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             imgBit.compress(Bitmap.CompressFormat.JPEG, 100, baos);

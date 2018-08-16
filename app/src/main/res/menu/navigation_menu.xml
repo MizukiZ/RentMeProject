@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
  <!--this page is style of the drawar menu-->
     <item android:id="@+id/itemPost"
-        android:icon="@drawable/account"
+        android:icon="@drawable/post"
         android:title="New Post"/>
 
     <item android:id="@+id/itemAccount"
-        android:icon="@drawable/post"
+        android:icon="@drawable/account"
         android:title="Account"/>
 
     <item android:id="@+id/itemMessageBox"
@@ -15,7 +15,7 @@
 
     <item android:id="@+id/itemPostbox"
         android:icon="@drawable/box"
-        android:title="Settings"/>
+        android:title="Item Box"/>
 
     <item android:id="@+id/itemHelp"
         android:icon="@drawable/help"
