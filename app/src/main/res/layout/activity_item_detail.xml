@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
 <ScrollView
     android:layout_width="match_parent"
@@ -82,12 +82,19 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/itemDetailLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        />
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:id="@+id/googleMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"        android:id="@+id/googleMap"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginBottom="80dp"
+        tools:context="com.example.mapwithmarker.MapsMarkerActivity"
         />
 
 

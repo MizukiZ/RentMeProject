@@ -1,6 +1,8 @@
 package com.example.mizuki.rentmeproject;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +15,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import Helper.TimeFormat;
@@ -31,30 +36,22 @@ import Model.User;
 public class ItemDetailActivity extends AppCompatActivity {
 
     ImageView itemImage;
-    TextView itemTitle,itemPostTime,itemDescription,itemPrice,postUserName;
+    TextView itemTitle,itemPostTime,itemDescription,itemPrice,postUserName,itemDetailLocation;
     Post post;
     User postUser;
 
     private DatabaseReference userDB;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-
-
-        // create google map and set to the fragment view
-        MapFragment mapFragment = (MapFragment)getFragmentManager().findFragmentById(R.id.googleMap);
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap map) {
-                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(35.681382, 139.766084), 15));
-            }
-        });
-
 
         // init views
         itemImage = findViewById(R.id.itemDetailImage);
@@ -62,6 +59,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         itemPostTime = findViewById(R.id.itemDetailPostDate);
         itemDescription = findViewById(R.id.itemDetailDescription);
         itemPrice = findViewById(R.id.itemDetailPrice);
+        itemDetailLocation = findViewById(R.id.itemDetailLocation);
         postUserName = findViewById(R.id.itemDetailUserName);
 
         //firebase
@@ -90,11 +88,58 @@ public class ItemDetailActivity extends AppCompatActivity {
                 itemHash.get("updated_at").toString()
                 );
 
+        // do reverse geocoding here
+        Geocoder gc = new Geocoder(ItemDetailActivity.this);
+
+        try {
+            List<Address> list = gc.getFromLocation(
+                    // put post lat and lon
+                    post.getLocation().get("lat"),
+                    post.getLocation().get("lon"),
+                    1);
+
+            // get first result
+            Address address = list.get(0);
+
+            // create template of the address name
+            StringBuffer addressStr = new StringBuffer();
+            addressStr.append(address.getLocality() + ", ");
+            addressStr.append(address.getAdminArea() + " ");
+            addressStr.append(address.getPostalCode());
+
+            String locationAddress = addressStr.toString();
+
+            // set on the view
+            itemDetailLocation.setText(locationAddress);
+
+        }catch(Exception e){
+            Log.d("Geocoding", e.getMessage());
+        }
+
         Picasso.get()
                 .load(itemHash.get("image").toString())
                 .resize(500,300)
                 .placeholder(R.drawable.loading_placeholder)
                 .into(itemImage);
+
+
+        // create google map and set to the fragment view
+        // when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.googleMap);
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+
+                LatLng itemLocation = new LatLng(
+                        post.getLocation().get("lat"),
+                        post.getLocation().get("lon"));
+
+                googleMap.addMarker(new MarkerOptions().position(itemLocation)
+                        .title("Item's location"));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(itemLocation,15.0f));
+            }
+        });
 
         userDB.addValueEventListener(new ValueEventListener() {
             @Override
