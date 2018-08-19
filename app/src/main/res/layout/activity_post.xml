@@ -120,13 +120,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            style="@android:style/ButtonBar">
+            style="@android:style/ButtonBar"
+            >
 
         <Button
             android:id="@+id/btnPost"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:foreground="?android:attr/selectableItemBackground"
             android:background="@color/postButtonColor"
             android:text="Post this item"/>
 
