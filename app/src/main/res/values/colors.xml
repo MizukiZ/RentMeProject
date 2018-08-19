@@ -7,6 +7,5 @@
     <color name="appBackGround">#FFFFFF</color>
     <color name="hintText">#C4C4C4</color>
     <color name="postButtonColor">#BEDB69</color>
+    <color name="sendMessageButtonColor">#69DB74</color>
 </resources>
-
-
