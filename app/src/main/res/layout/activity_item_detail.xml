@@ -20,7 +20,7 @@
     <ImageView
         android:id="@+id/itemDetailImage"
         android:layout_width="match_parent"
-        android:layout_margin="40dp"
+        android:layout_margin="10dp"
         android:layout_height="200dp" />
 
 
@@ -28,42 +28,103 @@
         android:id="@+id/itemDetailTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:textSize="36sp"
         android:gravity="center"
+        android:text="test"
         />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="18sp"
+            android:gravity="start"
+            android:text="Posted on"
+            android:textColor="@color/hintText"
+            />
 
     <TextView
         android:id="@+id/itemDetailPostDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:textSize="24sp"
-        android:gravity="right"
+        android:layout_margin="10dp"
+        android:textSize="18sp"
+        android:gravity="start"
+        android:text="test"
         />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/hintText" />
 
     <TextView
         android:id="@+id/itemDetailDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:textSize="18sp"
-        android:gravity="center"
+        android:gravity="left"
+        android:text="test"
         />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/hintText" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
     <TextView
         android:id="@+id/itemDetailPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
+        android:layout_margin="10dp"
         android:textColor="@android:color/holo_red_light"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:text="test"
+        />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="18sp"
+            android:gravity="start"
+            android:text="Per night"
+            android:textColor="@color/hintText"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/hintText" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -76,18 +137,37 @@
         <TextView
             android:id="@+id/itemDetailUserName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|left"
+            android:text="test"
             android:textSize="18sp"
             />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/itemDetailLocation"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="end"
+        >
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/marker"
+            android:layout_marginRight="5dp"
+            />
+
+    <TextView
+        android:id="@+id/itemDetailLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="14sp"
+        android:layout_marginBottom="10dp"
+        android:gravity="end"
         />
+
+    </LinearLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:name="com.google.android.gms.maps.SupportMapFragment"        android:id="@+id/googleMap"
