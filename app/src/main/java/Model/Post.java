@@ -1,10 +1,13 @@
 package Model;
 
 import java.security.Timestamp;
+import java.util.Map;
 
 public class Post {
 
-    private String id,title,description,image,location,category,user_id;
+    private String id,title,description,image;
+    private Map<String, Double> location;
+    private String category,user_id;
     private Double cost;
     private boolean rented;
     private Object created_at,updated_at;
@@ -12,7 +15,7 @@ public class Post {
     public Post() {
     }
 
-    public Post(String id, String title, String description, String image, String location, String category, String user_id, Double cost, boolean rented, Object created_at, Object updated_at) {
+    public Post(String id, String title, String description, String image, Map<String, Double> location, String category, String user_id, Double cost, boolean rented, Object created_at, Object updated_at) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -58,11 +61,11 @@ public class Post {
         this.image = image;
     }
 
-    public String getLocation() {
+    public Map<String, Double> getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Map<String, Double> location) {
         this.location = location;
     }
 

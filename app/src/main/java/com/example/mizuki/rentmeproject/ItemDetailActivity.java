@@ -5,6 +5,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import Helper.TimeFormat;
 import Model.Post;
@@ -36,12 +38,14 @@ public class ItemDetailActivity extends AppCompatActivity {
     private DatabaseReference userDB;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
 
 
+        // create google map and set to the fragment view
         MapFragment mapFragment = (MapFragment)getFragmentManager().findFragmentById(R.id.googleMap);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -67,13 +71,17 @@ public class ItemDetailActivity extends AppCompatActivity {
         @SuppressWarnings("unchecked")
         HashMap<String, Object> itemHash = (HashMap<String, Object>)intent.getSerializableExtra("itemObject");
 
+        // cast object to map
+        @SuppressWarnings("unchecked")
+        Map<String, Double> location = (Map<String, Double>)itemHash.get("location");
+
         // create post object by passed data
         post  = new Post(
                 itemHash.get("id").toString(),
                 itemHash.get("title").toString(),
                 itemHash.get("description").toString(),
                 itemHash.get("image").toString(),
-                itemHash.get("location").toString(),
+                location,
                 itemHash.get("category").toString(),
                 itemHash.get("user_id").toString(),
                 Double.valueOf(itemHash.get("price").toString()),

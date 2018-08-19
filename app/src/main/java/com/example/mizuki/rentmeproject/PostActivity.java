@@ -37,7 +37,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import Model.Post;
@@ -46,6 +48,9 @@ import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class PostActivity extends AppCompatActivity {
+
+    // address latitude and longitude
+    Double lat,lon;
 
     EditText postLocation,postTitle,postCost,postDescription;
     ImageView postCamera, uploadPhoto;
@@ -140,6 +145,11 @@ public class PostActivity extends AppCompatActivity {
                 if(resultCode == RESULT_OK) {
                     Place place = PlaceAutocomplete.getPlace(this, data);
                     CharSequence location = place.getAddress().toString();
+
+                    //set lat and lon
+                    lat = place.getLatLng().latitude;
+                    lon = place.getLatLng().longitude;
+
                     postLocation.setText(location);
                     break;
                 }
@@ -189,8 +199,12 @@ public class PostActivity extends AppCompatActivity {
         final String title = postTitle.getText().toString();
         final String category = postCategory.getSelectedItem().toString();
         final String description = postDescription.getText().toString();
-        final String location = postLocation.getText().toString();
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // create map hash for location lan and lon
+        final Map<String, Double> location = new HashMap<>();
+        location.put("lat", lat);
+        location.put("lon",lon);
 
         // give a unique ID for the image
         final StorageReference ref = storageReference.child("ItemImages/"+ UUID.randomUUID().toString());
@@ -240,6 +254,8 @@ public class PostActivity extends AppCompatActivity {
                         // image url for database
                         String downloadUri = task.getResult().toString();
 
+
+
                         // create new post object to ues user class
                         Post post = new Post(
                                 postId,
@@ -260,14 +276,15 @@ public class PostActivity extends AppCompatActivity {
                             public void onSuccess(Void aVoid) {
                                 // success handle
 
-                                // dismiss dialog
-                                postingDialog.dismiss();
+                                        // dismiss dialog
+                                        postingDialog.dismiss();
 
-                                Toast.makeText(PostActivity.this, "posted!!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PostActivity.this, "posted!!", Toast.LENGTH_SHORT).show();
 
-                                // redirect to Main
-                                startActivity(new Intent(PostActivity.this, HomeActivity.class));
-                                finish();
+                                        // redirect to Main
+                                        startActivity(new Intent(PostActivity.this, HomeActivity.class));
+                                        finish();
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
