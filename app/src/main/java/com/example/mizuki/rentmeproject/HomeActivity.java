@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -47,6 +48,9 @@ public class HomeActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Toolbar toolbar;
     private ListView listView;
+
+    private SearchView searchView;
+    private MenuItem searchItem;
 
     private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn,resetBtn;
 
@@ -124,9 +128,12 @@ public class HomeActivity extends AppCompatActivity {
                     if(!dataSnapshot.exists()){
 
                         // no result message
-                        Toast.makeText(HomeActivity.this, "No result is Found...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "No result found", Toast.LENGTH_SHORT).show();
                     }
-                        updateListVIew(dataSnapshot);
+                    String resultCount = String.valueOf(dataSnapshot.getChildrenCount());
+                    Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
+
+                    updateListVIew(dataSnapshot);
 
                 }
 
@@ -286,18 +293,24 @@ public class HomeActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.searchview_menu, menu);
 
             // activate search item
-            MenuItem searchItem = menu.findItem(R.id.itemSearch);
-            SearchView searchView = (SearchView) searchItem.getActionView();
+            searchItem = menu.findItem(R.id.itemSearch);
+            searchView = (SearchView) searchItem.getActionView();
 
             // set hint text
             searchView.setQueryHint("Search items");
+
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     // when user submit the text
-                    Toast.makeText(HomeActivity.this, query, Toast.LENGTH_SHORT).show();
-                    return false;
+                    wordSearch(query);
+
+                    // make empty and close the search field
+                    searchView.clearFocus();
+                    searchItem.collapseActionView();
+
+                    return true;
                 }
 
                 @Override
@@ -342,11 +355,19 @@ public class HomeActivity extends AppCompatActivity {
 
         public void categoryFilter(String category){
 
+            // empty search field
+            if(searchView != null) {
+                // make empty and close the search field
+                searchView.clearFocus();
+                searchItem.collapseActionView();
+            }
+
             if(category.equals("All")){
 
                 // remove previous listener
                 db.child("Post").removeEventListener(updateEventListener);
-                db.child("Post").orderByChild("category").equalTo(category).removeEventListener(updateEventListener);
+                db.child("Post").removeEventListener(updateEventListener);
+                db.child("Post").removeEventListener(updateEventListener);
 
                 // when category all
                 db.child("Post").addValueEventListener(updateEventListener);
@@ -355,13 +376,27 @@ public class HomeActivity extends AppCompatActivity {
 
                 // remove previous listener
                 db.child("Post").removeEventListener(updateEventListener);
-                db.child("Post").orderByChild("category").equalTo(category).removeEventListener(updateEventListener);
+                db.child("Post").removeEventListener(updateEventListener);
+                db.child("Post").removeEventListener(updateEventListener);
 
                 // when something but All
                 db.child("Post").orderByChild("category").equalTo(category).addValueEventListener(updateEventListener);
 
             }
         }
+
+        public void wordSearch(String query){
+           // remove previous listener
+            db.child("Post").removeEventListener(updateEventListener);
+            db.child("Post").removeEventListener(updateEventListener);
+            db.child("Post").removeEventListener(updateEventListener);
+
+
+            db.child("Post").orderByChild("title").startAt(query).endAt(query + "\uf8ff")
+                    .addValueEventListener(updateEventListener);
+
+        }
+
 
 
 
