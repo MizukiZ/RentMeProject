@@ -40,6 +40,7 @@ import java.util.HashMap;
 import Helper.ItemListAdapter;
 import Model.Post;
 import Model.User;
+import dmax.dialog.SpotsDialog;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -53,6 +54,8 @@ public class HomeActivity extends AppCompatActivity {
     private MenuItem searchItem;
 
     private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn,resetBtn;
+
+    android.app.AlertDialog searchDialog;
 
     private DatabaseReference db;
     User currentUser;
@@ -120,6 +123,14 @@ public class HomeActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             actionBarDrawerToggle.syncState();
 
+            // make progress dialog and show
+            searchDialog = new SpotsDialog.Builder().setContext(HomeActivity.this)
+                    .setMessage("Searching")
+                    .build();
+
+            searchDialog.show();
+
+
 
             // set update event listener
             updateEventListener = new ValueEventListener() {
@@ -163,6 +174,7 @@ public class HomeActivity extends AppCompatActivity {
             sportBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    searchDialog.show();
                  categoryFilter("Sport");
                 }
             });
@@ -170,6 +182,7 @@ public class HomeActivity extends AppCompatActivity {
             appilianceBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    searchDialog.show();
                     categoryFilter("Appliance");
                 }
             });
@@ -177,6 +190,7 @@ public class HomeActivity extends AppCompatActivity {
             instrumentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    searchDialog.show();
                     categoryFilter("Instrument");
                 }
             });
@@ -184,6 +198,7 @@ public class HomeActivity extends AppCompatActivity {
             clotheBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    searchDialog.show();
                     categoryFilter("Clothe");
                 }
             });
@@ -191,6 +206,7 @@ public class HomeActivity extends AppCompatActivity {
             toolBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    searchDialog.show();
                     categoryFilter("Tool");
                 }
             });
@@ -198,6 +214,7 @@ public class HomeActivity extends AppCompatActivity {
             rideBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    searchDialog.show();
                     categoryFilter("Ride");
                 }
             });
@@ -205,6 +222,7 @@ public class HomeActivity extends AppCompatActivity {
             resetBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    searchDialog.show();
                     categoryFilter("All");
                 }
             });
@@ -303,6 +321,8 @@ public class HomeActivity extends AppCompatActivity {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
+                    searchDialog.show();
+
                     // when user submit the text
                     wordSearch(query);
 
@@ -351,6 +371,8 @@ public class HomeActivity extends AppCompatActivity {
             // set list view with the custom adapter
             listView.setAdapter(itemListAdapter);
 
+
+            searchDialog.dismiss();
         }
 
         public void categoryFilter(String category){
