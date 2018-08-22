@@ -48,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ListView listView;
 
-    private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn;
+    private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn,resetBtn;
 
     private DatabaseReference db;
     User currentUser;
@@ -93,6 +93,7 @@ public class HomeActivity extends AppCompatActivity {
             clotheBtn = findViewById(R.id.clotheBtn);
             toolBtn = findViewById(R.id.toolBtn);
             rideBtn = findViewById(R.id.rideBtn);
+            resetBtn = findViewById(R.id.resetBtn);
 
             listView = findViewById(R.id.listview1);
 
@@ -120,7 +121,13 @@ public class HomeActivity extends AppCompatActivity {
             updateEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    updateListVIew(dataSnapshot);
+                    if(!dataSnapshot.exists()){
+
+                        // no result message
+                        Toast.makeText(HomeActivity.this, "No result is Found...", Toast.LENGTH_SHORT).show();
+                    }
+                        updateListVIew(dataSnapshot);
+
                 }
 
                 @Override
@@ -188,6 +195,13 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
+            resetBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    categoryFilter("All");
+                }
+            });
+
 
 
 
@@ -248,6 +262,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
+            // set all of them as default
             categoryFilter("All");
 
         }

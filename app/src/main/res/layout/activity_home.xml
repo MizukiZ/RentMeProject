@@ -107,7 +107,6 @@
                 android:paddingTop="10dp"
                 android:drawableTop="@drawable/tool"
                 android:background="#BEDB69"
-                android:src="@drawable/tool"
                 android:text="Tools"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
@@ -121,8 +120,18 @@
                 android:paddingTop="10dp"
                 android:drawableTop="@drawable/ride"
                 android:background="#DB9269"
-                android:src="@drawable/ride"
                 android:text="Rides"
+                android:foreground="?android:attr/selectableItemBackground"
+                />
+
+            <Button
+                android:id="@+id/resetBtn"
+                android:layout_marginTop="5dp"
+                android:layout_width="30dp"
+                app:layout_flexBasisPercent="32%"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="Reset"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
 
