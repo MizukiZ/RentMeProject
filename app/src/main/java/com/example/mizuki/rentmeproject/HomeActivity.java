@@ -3,6 +3,7 @@ package com.example.mizuki.rentmeproject;
 import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
+import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -44,9 +46,14 @@ public class HomeActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
     private Toolbar toolbar;
+    private ListView listView;
+
+    private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn;
 
     private DatabaseReference db;
     User currentUser;
+
+    ValueEventListener updateEventListener;
 
     private String userId;
 
@@ -80,10 +87,17 @@ public class HomeActivity extends AppCompatActivity {
             navigationView = findViewById(R.id.nv);
             toolbar = findViewById(R.id.toolbar);
 
+            sportBtn = findViewById(R.id.sportsBtn);
+            appilianceBtn = findViewById(R.id.appilianceBtn);
+            instrumentBtn = findViewById(R.id.insutrumentBtn);
+            clotheBtn = findViewById(R.id.clotheBtn);
+            toolBtn = findViewById(R.id.toolBtn);
+            rideBtn = findViewById(R.id.rideBtn);
+
+            listView = findViewById(R.id.listview1);
 
             // firebase
             db = FirebaseDatabase.getInstance().getReference();
-
 
             // make instance of custom simple adapter and put data in
             itemListAdapter = new ItemListAdapter(this,
@@ -100,6 +114,81 @@ public class HomeActivity extends AppCompatActivity {
             drawerLayout.addDrawerListener(actionBarDrawerToggle);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             actionBarDrawerToggle.syncState();
+
+
+            // set update event listener
+            updateEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    updateListVIew(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            };
+
+            // set event list view items click listener
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    //get clicked view object
+                    @SuppressWarnings("unchecked")
+                    HashMap<String, Object> itemObject = (HashMap<String, Object>) itemListAdapter.getItem(position);
+
+                    Intent detailPageIntent = new Intent(HomeActivity.this, ItemDetailActivity.class);
+                    detailPageIntent.putExtra("itemObject", itemObject);
+                    HomeActivity.this.startActivity(detailPageIntent);
+                }
+            });
+
+            // click event for category buttons
+
+            sportBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                 categoryFilter("Sport");
+                }
+            });
+
+            appilianceBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    categoryFilter("Appliance");
+                }
+            });
+
+            instrumentBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    categoryFilter("Instrument");
+                }
+            });
+
+            clotheBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    categoryFilter("Clothe");
+                }
+            });
+
+            toolBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    categoryFilter("Tool");
+                }
+            });
+
+            rideBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    categoryFilter("Ride");
+                }
+            });
+
+
 
 
             // click event for the navigation items
@@ -159,58 +248,8 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-            // Attach a listener to read the post data
-            db.child("Post").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+            categoryFilter("All");
 
-                    // reset the list
-                    itemListData.clear();
-
-                    // loop the data to generate item list array
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                        Post post = snapshot.getValue(Post.class);
-
-                        HashMap<String, Object> data = new HashMap<>();
-                        data.put("image", post.getImage());
-                        data.put("description", post.getDescription());
-                        data.put("id", post.getId());
-                        data.put("category", post.getCategory());
-                        data.put("location", post.getLocation());
-                        data.put("title", post.getTitle());
-                        data.put("price", post.getCost());
-                        data.put("rented", post.isRented());
-                        data.put("created_at", post.getCreated_at());
-                        data.put("updated_at", post.getUpdated_at());
-                        data.put("user_id", post.getUser_id());
-
-                        itemListData.add(data);
-                    }
-                    // set list view with the custom adapter
-                    final ListView listView = findViewById(R.id.listview1);
-                    listView.setAdapter(itemListAdapter);
-
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                            //get clicked view object
-                            @SuppressWarnings("unchecked")
-                            HashMap<String, Object> itemObject = (HashMap<String, Object>) itemListAdapter.getItem(position);
-
-                            Intent detailPageIntent = new Intent(HomeActivity.this, ItemDetailActivity.class);
-                            detailPageIntent.putExtra("itemObject", itemObject);
-                            HomeActivity.this.startActivity(detailPageIntent);
-                        }
-                    });
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                }
-            });
         }
 
         }
@@ -255,5 +294,60 @@ public class HomeActivity extends AppCompatActivity {
 
             return true;
         }
+
+        public void updateListVIew(DataSnapshot dataSnapshot){
+
+            // reset the list
+            itemListData.clear();
+
+            // loop the data to generate item list array
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                Post post = snapshot.getValue(Post.class);
+
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("image", post.getImage());
+                data.put("description", post.getDescription());
+                data.put("id", post.getId());
+                data.put("category", post.getCategory());
+                data.put("location", post.getLocation());
+                data.put("title", post.getTitle());
+                data.put("price", post.getCost());
+                data.put("rented", post.isRented());
+                data.put("created_at", post.getCreated_at());
+                data.put("updated_at", post.getUpdated_at());
+                data.put("user_id", post.getUser_id());
+
+                itemListData.add(data);
+            }
+            // set list view with the custom adapter
+            listView.setAdapter(itemListAdapter);
+
+        }
+
+        public void categoryFilter(String category){
+
+            if(category.equals("All")){
+
+                // remove previous listener
+                db.child("Post").removeEventListener(updateEventListener);
+                db.child("Post").orderByChild("category").equalTo(category).removeEventListener(updateEventListener);
+
+                // when category all
+                db.child("Post").addValueEventListener(updateEventListener);
+
+            }else {
+
+                // remove previous listener
+                db.child("Post").removeEventListener(updateEventListener);
+                db.child("Post").orderByChild("category").equalTo(category).removeEventListener(updateEventListener);
+
+                // when something but All
+                db.child("Post").orderByChild("category").equalTo(category).addValueEventListener(updateEventListener);
+
+            }
+        }
+
+
 
 }
