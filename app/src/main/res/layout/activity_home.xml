@@ -125,6 +125,17 @@
                 />
 
             <Button
+                android:id="@+id/nearByBtn"
+                android:layout_marginTop="5dp"
+                android:layout_width="30dp"
+                app:layout_flexBasisPercent="32%"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="Near by"
+                android:foreground="?android:attr/selectableItemBackground"
+                />
+
+            <Button
                 android:id="@+id/resetBtn"
                 android:layout_marginTop="5dp"
                 android:layout_width="30dp"

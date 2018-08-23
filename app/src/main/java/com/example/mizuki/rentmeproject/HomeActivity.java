@@ -1,12 +1,14 @@
 package com.example.mizuki.rentmeproject;
 
-import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.renderscript.Sampler;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,22 +19,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +43,8 @@ import Model.Post;
 import Model.User;
 import dmax.dialog.SpotsDialog;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 public class HomeActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -49,30 +52,35 @@ public class HomeActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Toolbar toolbar;
     private ListView listView;
+    private String userId;
 
     private SearchView searchView;
     private MenuItem searchItem;
 
-    private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn,resetBtn;
+    private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn, resetBtn , nearByBtn;
 
     android.app.AlertDialog searchDialog;
 
     private DatabaseReference db;
     User currentUser;
 
+    final int GPS_PERMISSION_CODE = 44;
+    boolean gpsPermission = false;
+
     ValueEventListener updateEventListener;
 
-    private String userId;
+    private FusedLocationProviderClient locationClient;
 
 
-    ArrayList<HashMap<String,Object>> itemListData = new ArrayList<>();
+    ArrayList<HashMap<String, Object>> itemListData = new ArrayList<>();
     SimpleAdapter itemListAdapter;
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(currentUser != null){
-        Log.d("Userdata", currentUser.getEmail());}
+//        if (currentUser != null) {
+//            Log.d("Userdata", currentUser.getEmail());
+//        }
     }
 
     @Override
@@ -101,11 +109,17 @@ public class HomeActivity extends AppCompatActivity {
             toolBtn = findViewById(R.id.toolBtn);
             rideBtn = findViewById(R.id.rideBtn);
             resetBtn = findViewById(R.id.resetBtn);
+            nearByBtn = findViewById(R.id.nearByBtn);
 
             listView = findViewById(R.id.listview1);
 
             // firebase
             db = FirebaseDatabase.getInstance().getReference();
+
+
+            // location service
+            locationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
             // make instance of custom simple adapter and put data in
             itemListAdapter = new ItemListAdapter(this,
@@ -116,6 +130,10 @@ public class HomeActivity extends AppCompatActivity {
 
             // set toolbar as actionbar(converting)
             setSupportActionBar(toolbar);
+
+            // ask permission for the GPS use
+            requestPermission();
+
 
             // set drawerToggle in toolbar
             actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -129,7 +147,6 @@ public class HomeActivity extends AppCompatActivity {
                     .build();
 
             searchDialog.show();
-
 
 
             // set update event listener
@@ -219,6 +236,14 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
+            nearByBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    detectGPS();
+
+                }
+            });
+
             resetBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -292,7 +317,9 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
+
         }
+
 
         @Override
         public boolean onOptionsItemSelected (MenuItem item){
@@ -416,10 +443,83 @@ public class HomeActivity extends AppCompatActivity {
 
             db.child("Post").orderByChild("title").startAt(query).endAt(query + "\uf8ff")
                     .addValueEventListener(updateEventListener);
-
         }
 
+    public void detectGPS(){
 
+        if(gpsPermission) {
+            final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                // gps is off
+                Toast.makeText(this, "Please turn on GPS to use this service", Toast.LENGTH_SHORT).show();
 
+                String locationProviders = Settings.Secure.getString(getContentResolver(), LocationManager.PROVIDERS_CHANGED_ACTION);
+                if (locationProviders == null || locationProviders.equals("")) {
+                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                }
+            } else {
+                // gps is ON
+                // call get location func
+                getCurrentLocation();
+            }
+        }else{
+            // no permission handling
+            Toast.makeText(this, "Please accept GPS permission", Toast.LENGTH_SHORT).show();
 
+        }
+    }
+
+    public void getCurrentLocation(){
+
+        // get current location
+        if (ActivityCompat.checkSelfPermission(HomeActivity.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("Location service", "No Permission");
+            return;
+        }
+
+        locationClient.getLastLocation().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location == null) {
+                    Toast.makeText(HomeActivity.this, "Sorry could't get your location", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(HomeActivity.this, String.valueOf(location.getLatitude()), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    // request permission to users
+    public void requestPermission(){
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION},GPS_PERMISSION_CODE);
+    }
+
+    // get result from request permission
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case GPS_PERMISSION_CODE:{
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted
+
+                    // set the variable true
+                    gpsPermission = true;
+
+                } else {
+
+                    // permission denied, boo!
+                    Log.d("Permission result", "denied");
+                    gpsPermission = false;
+                }
+                return;
+            }
+        }
+    }
 }

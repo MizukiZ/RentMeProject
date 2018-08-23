@@ -4,8 +4,10 @@
 
     <!-- check if users device has got a camera -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!--Gps permission-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +30,8 @@
             android:name=".PostActivity"
             android:windowSoftInputMode="adjustPan"></activity>
 
+        <activity android:name=".ItemDetailActivity"></activity>
+
         <!-- google api key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -37,7 +41,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ItemDetailActivity"></activity>
     </application>
 
     <uses-feature
