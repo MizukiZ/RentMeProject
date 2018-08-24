@@ -3,35 +3,35 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="120dp"
+    android:layout_height="320dp"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@drawable/border_line"
     android:foreground="?android:attr/selectableItemBackground"
     android:padding="10dp"
     >
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        >
 
     <ImageView
         android:id="@+id/itemImg"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="2000dp"
+        android:scaleType="fitXY"
         android:layout_gravity="center_vertical"
         />
 
         <TextView
             android:id="@+id/itemRented"
             android:layout_centerInParent="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textAlignment="center"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="30sp"
             android:textColor="@android:color/holo_red_light"
             />
 
