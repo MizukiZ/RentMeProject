@@ -36,7 +36,7 @@ import Model.User;
 
 public class ItemDetailActivity extends AppCompatActivity {
 
-    ImageView itemImage;
+    ImageView itemImage,itemDetailUserImage;
     TextView itemTitle,itemPostTime,itemDescription,itemPrice,postUserName,itemDetailLocation;
     Post post;
     User postUser;
@@ -62,6 +62,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         itemPrice = findViewById(R.id.itemDetailPrice);
         itemDetailLocation = findViewById(R.id.itemDetailLocation);
         postUserName = findViewById(R.id.itemDetailUserName);
+        itemDetailUserImage = findViewById(R.id.itemDetailUserImage);
 
         //firebase
         userDB = FirebaseDatabase.getInstance().getReference("Users");
@@ -126,8 +127,26 @@ public class ItemDetailActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // get user id from post item and create user instance
                 postUser = dataSnapshot.child(post.getUser_id()).getValue(User.class);
+
+                // create user instance
+                User user = new User(
+                        null,
+                        postUser.getUserName().toString(),
+                        null,
+                        null,
+                        postUser.getImage() != null ? postUser.getImage().toString() : null,
+                        postUser.getBio().toString(),
+                        postUser.getLocation()
+                );
+
                 // set post user name
                 postUserName.setText(postUser.getUserName());
+
+                Picasso.get()
+                        .load(user.getImage())
+                        .resize(500,300)
+                        .placeholder(R.drawable.account)
+                        .into(itemDetailUserImage);
             }
 
             @Override
