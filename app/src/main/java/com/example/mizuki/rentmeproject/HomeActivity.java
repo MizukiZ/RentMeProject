@@ -35,10 +35,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import Helper.ItemFilterHandler;
 import Helper.ItemListAdapter;
 import Model.Post;
 import Model.User;
@@ -398,7 +401,10 @@ public class HomeActivity extends AppCompatActivity {
                 data.put("updated_at", post.getUpdated_at());
                 data.put("user_id", post.getUser_id());
 
+
                 itemListData.add(data);
+                ItemFilterHandler itemFilterHandler = new ItemFilterHandler(itemListData);
+
             }
             // set list view with the custom adapter
             listView.setAdapter(itemListAdapter);
@@ -494,66 +500,23 @@ public class HomeActivity extends AppCompatActivity {
                     currentLat =  location.getLatitude();
                     currentLon =  location.getLongitude();
 
-                    db.child("Post").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            // reset the list
-                            itemListData.clear();
-
-                            // loop the data to generate item list array
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                                Post post = snapshot.getValue(Post.class);
-
-                                Map<String,Double> locationMap = post.getLocation();
-
-                                float[] results = new float[1];
-
-                                // compare current location and item's location
-                                Location.distanceBetween(
-                                       currentLat,
-                                       currentLon,
-                                       post.getLocation().get("lat"),
-                                       post.getLocation().get("lon"),
-                                       results
-                                       );
-
-                                // get result in km
-                                float resultInKm = results[0] / 1000;
+                    // get filter helper instance with new itemlistData
+                    ItemFilterHandler filterHelp = new ItemFilterHandler(itemListData);
 
 
-                                Log.d("Current lat",  String.valueOf(currentLat) + " km");
-                                Log.d("Current lon",  String.valueOf(currentLon) + " km");
-                                Log.d("Distance result",  String.valueOf(resultInKm) + " km");
+                    // filter the itemList and set it to item List data
+                    ArrayList<HashMap<String,Object>>  filteredList = (ArrayList<HashMap<String,Object>>) filterHelp.nearByFilter(currentLat,currentLon,20);
+                    itemListData.clear();
+                    itemListData.addAll(filteredList);
 
-                                // if the item is within 20km
-                               if(resultInKm < 20.0f) {
-                                HashMap<String, Object> data = new HashMap<>();
-                                data.put("image", post.getImage());
-                                data.put("description", post.getDescription());
-                                data.put("id", post.getId());
-                                data.put("category", post.getCategory());
-                                data.put("location", post.getLocation());
-                                data.put("title", post.getTitle());
-                                data.put("price", post.getCost());
-                                data.put("rented", post.isRented());
-                                data.put("created_at", post.getCreated_at());
-                                data.put("updated_at", post.getUpdated_at());
-                                data.put("user_id", post.getUser_id());
+                    int resultCount = itemListData.toArray().length;
 
-                                itemListData.add(data);
-                               }
-                            }
 
-                            // set list view with the custom adapter
-                            listView.setAdapter(itemListAdapter);
-                        }
+                    // set list view with the custom adapter
+                    listView.setAdapter(itemListAdapter);
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
 
-                        }
-                    });
                 }
             }
         });
