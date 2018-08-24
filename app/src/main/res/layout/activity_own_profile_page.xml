@@ -11,24 +11,32 @@
         android:layout_marginTop="60dp"
         android:orientation="vertical"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/border_line"
+        android:padding="15dp"
         >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            >
 
             <ImageView
                 android:id="@+id/ownImg"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:scaleType="fitXY"
                />
 
             <ImageButton
                 android:id="@+id/ownImgCamera"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
                 android:src="@android:drawable/ic_menu_camera"
-                android:background="#DB9269"
+                android:background="#69DBDB"
+                android:scaleType="fitXY"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
 
@@ -41,7 +49,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Edit Mode"
+                    android:textSize="16dp"
                     android:gravity="center"
+                    android:layout_marginBottom="10dp"
                     />
 
             <Switch
@@ -49,8 +59,8 @@
                 android:textOff="off"
                 android:textOn="on"
                 android:showText="true"
-                android:gravity="center"
                 android:layout_width="match_parent"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 />
             </LinearLayout>
@@ -69,6 +79,7 @@
             android:layout_height="wrap_content"
             android:text="User name:"
             android:textColor="@color/hintText"
+            android:textSize="16dp"
             />
 
         <EditText
@@ -98,6 +109,7 @@
             android:layout_height="wrap_content"
             android:text="Bio:"
             android:textColor="@color/hintText"
+            android:textSize="16dp"
             />
 
         <EditText
@@ -108,7 +120,6 @@
             android:inputType="textMultiLine|textAutoComplete"
             android:lines="5"
             android:scrollbars="vertical"
-            android:text=""
             android:textColorHint="@color/hintText"
             android:textSize="20sp"
             android:focusable="false"
@@ -127,6 +138,7 @@
             android:layout_height="wrap_content"
             android:text="Location:"
             android:textColor="@color/hintText"
+            android:textSize="16dp"
             />
 
         <EditText
@@ -159,7 +171,7 @@
             android:id="@+id/btnUpdate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#DB9269"
+            android:background="#69DBDB"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center"
             android:text="Update profile" />
