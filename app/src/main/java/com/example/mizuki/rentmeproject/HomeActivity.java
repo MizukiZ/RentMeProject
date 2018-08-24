@@ -287,8 +287,16 @@ public class HomeActivity extends AppCompatActivity {
                             return true;
 
                         case R.id.itemAccount:
-                            Toast.makeText(HomeActivity.this, "Account", Toast.LENGTH_SHORT).show();
+
+                            //  redirect to post page
+                            Intent ownProfilePageIntent = new Intent(HomeActivity.this, OwnProfilePage.class);
+
+                            // set user id
+                            currentUser.setId(userId);
+                            ownProfilePageIntent.putExtra("user",currentUser.toHashData());
+                            HomeActivity.this.startActivity(ownProfilePageIntent);
                             return true;
+
 
                         case R.id.itemMessageBox:
                             Toast.makeText(HomeActivity.this, "MessageBox", Toast.LENGTH_SHORT).show();

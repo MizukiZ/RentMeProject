@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="60dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ownImg"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+               />
+
+            <ImageButton
+                android:id="@+id/ownImgCamera"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:background="#DB9269"
+                android:foreground="?android:attr/selectableItemBackground"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Mode"
+                    android:gravity="center"
+                    />
+
+            <Switch
+                android:id="@+id/editToggle"
+                android:textOff="off"
+                android:textOn="on"
+                android:showText="true"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User name:"
+            android:textColor="@color/hintText"
+            />
+
+        <EditText
+            android:id="@+id/ownName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="User name"
+            android:inputType="text"
+            android:text=""
+            android:textColorHint="@color/hintText"
+            android:textSize="20sp"
+            android:focusable="false"
+            android:cursorVisible="false"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bio:"
+            android:textColor="@color/hintText"
+            />
+
+        <EditText
+            android:id="@+id/ownBio"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:hint="Bio"
+            android:inputType="textMultiLine|textAutoComplete"
+            android:lines="5"
+            android:scrollbars="vertical"
+            android:text=""
+            android:textColorHint="@color/hintText"
+            android:textSize="20sp"
+            android:focusable="false"
+            android:cursorVisible="false"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location:"
+            android:textColor="@color/hintText"
+            />
+
+        <EditText
+            android:id="@+id/ownLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Location"
+            android:inputType="textPostalAddress"
+            android:text=""
+            android:textColorHint="@color/hintText"
+            android:textSize="20sp"
+            android:focusable="false"
+            android:cursorVisible="false"
+            />
+
+    </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@android:style/ButtonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#DB9269"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="Update profile" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+

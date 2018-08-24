@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Helper.GeocodeHandler;
 import Helper.TimeFormat;
 import Model.Post;
 import Model.User;
@@ -88,33 +89,12 @@ public class ItemDetailActivity extends AppCompatActivity {
                 itemHash.get("updated_at").toString()
                 );
 
-        // do reverse geocoding here
-        Geocoder gc = new Geocoder(ItemDetailActivity.this);
+        // create geocode handler and get place name form lat and lon
+        GeocodeHandler geocodeHandler = new GeocodeHandler(this,location.get("lat"),location.get("lon"));
 
-        try {
-            List<Address> list = gc.getFromLocation(
-                    // put post lat and lon
-                    post.getLocation().get("lat"),
-                    post.getLocation().get("lon"),
-                    1);
+            itemDetailLocation.setText(geocodeHandler.getPlaceName());
 
-            // get first result
-            Address address = list.get(0);
 
-            // create template of the address name
-            StringBuffer addressStr = new StringBuffer();
-            addressStr.append(address.getLocality() + ", ");
-            addressStr.append(address.getAdminArea() + " ");
-            addressStr.append(address.getPostalCode());
-
-            String locationAddress = addressStr.toString();
-
-            // set on the view
-            itemDetailLocation.setText(locationAddress);
-
-        }catch(Exception e){
-            Log.d("Geocoding", e.getMessage());
-        }
 
         Picasso.get()
                 .load(itemHash.get("image").toString())
