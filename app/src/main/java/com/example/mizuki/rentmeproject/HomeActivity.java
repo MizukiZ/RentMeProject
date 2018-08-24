@@ -1,6 +1,7 @@
 package com.example.mizuki.rentmeproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -61,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
     private SearchView searchView;
     private MenuItem searchItem;
 
-    private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn, resetBtn , nearByBtn;
+    private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn, resetBtn , nearByBtn ,homePostBtn;
 
     android.app.AlertDialog searchDialog;
 
@@ -118,6 +120,7 @@ public class HomeActivity extends AppCompatActivity {
             rideBtn = findViewById(R.id.rideBtn);
             resetBtn = findViewById(R.id.resetBtn);
             nearByBtn = findViewById(R.id.nearByBtn);
+            homePostBtn = findViewById(R.id.homePostBtn);
 
             listView = findViewById(R.id.listview1);
 
@@ -260,6 +263,14 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
+            homePostBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //  redirect to new post page
+                    startActivity(new Intent(HomeActivity.this, PostActivity.class));
+                }
+            });
+
 
 
 
@@ -292,11 +303,38 @@ public class HomeActivity extends AppCompatActivity {
                             return true;
 
                         case R.id.itemLogout:
-//                                 when logout is clicked sign out form firebase auth
-                            FirebaseAuth.getInstance().signOut();
-                            // redirect to login page
-                            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-                            finish();
+//                                 when logout is clicked show dialog
+
+                            AlertDialog.Builder logoutDialog = new AlertDialog.Builder(HomeActivity.this);
+                            logoutDialog.setMessage("Do you want to logout?");
+                            logoutDialog.setCancelable(true);
+
+                            logoutDialog.setPositiveButton(
+                                    "Yes",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // yes is clicked signout from firebase
+
+                                            FirebaseAuth.getInstance().signOut();
+                                            // redirect to login page
+                                            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                                            finish();
+                                        }
+                                    });
+
+                            logoutDialog.setNegativeButton(
+                                    "No",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+
+//                                           //dismiss the dialog
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                            AlertDialog alert11 = logoutDialog.create();
+                            alert11.show();
+
                             return true;
 
                         default:
@@ -325,7 +363,6 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
-
         }
 
 
@@ -350,7 +387,7 @@ public class HomeActivity extends AppCompatActivity {
             searchView = (SearchView) searchItem.getActionView();
 
             // set hint text
-            searchView.setQueryHint("Search items");
+            searchView.setQueryHint("What do you want to rent?");
 
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
