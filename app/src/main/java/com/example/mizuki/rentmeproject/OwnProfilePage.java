@@ -92,6 +92,9 @@ public class OwnProfilePage extends AppCompatActivity {
 
         isEditMode = false;
 
+        // set non edit mode when user opens
+        editMode(isEditMode);
+
         // firebase
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -108,8 +111,6 @@ public class OwnProfilePage extends AppCompatActivity {
 
 
         // set default data into filed
-        Log.d("UserData", userData.toString());
-
 
         nameTxt.setText(userData.get("userName").toString());
 
@@ -179,6 +180,12 @@ public class OwnProfilePage extends AppCompatActivity {
                 String newName = nameTxt.getText().toString();
                 String newBio = bioTxt.getText().toString();
 
+                if(newName.isEmpty()){
+                    updatingDialog.dismiss();
+                    Toast.makeText(OwnProfilePage.this, "User name can't be blank", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // create map hash for location lan and lon
                 final Map<String, Double> location = new HashMap<>();
                 location.put("lat", lat);
@@ -229,13 +236,14 @@ public class OwnProfilePage extends AppCompatActivity {
                                 public void onSuccess(Void aVoid) {
                                     // success handle
                                     updatingDialog.dismiss();
+                                    Toast.makeText(OwnProfilePage.this, "Updated", Toast.LENGTH_SHORT).show();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     // fail handle
                                     updatingDialog.dismiss();
-                                    Toast.makeText(OwnProfilePage.this, "post failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(OwnProfilePage.this, "update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 
                                 }
                             });
@@ -266,6 +274,8 @@ public class OwnProfilePage extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             // success handle
                             updatingDialog.dismiss();
+                            Toast.makeText(OwnProfilePage.this, "Updated", Toast.LENGTH_SHORT).show();
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
