@@ -1,5 +1,6 @@
 package com.example.mizuki.rentmeproject;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,12 +18,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -59,6 +63,8 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ListView listView;
     private String userId;
+    private EditText distanceInput;
+    private int inputDistance;
 
     private SearchView searchView;
     private MenuItem searchItem;
@@ -250,8 +256,33 @@ public class HomeActivity extends AppCompatActivity {
             nearByBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    detectGPS();
 
+                    // Create Distance filter dialog
+                    View cdialog = getLayoutInflater().inflate(R.layout.nearby_dialog, null);
+                    AlertDialog.Builder distanceDialog = new AlertDialog.Builder(HomeActivity.this);
+                    distanceDialog.setTitle("Distance Filter");
+                    distanceDialog.setView(cdialog);
+
+                    // set positive button event
+                    distanceDialog.setPositiveButton("Filter", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            distanceInput = cdialog.findViewById(R.id.distanceInput);
+                            inputDistance = Integer.valueOf(distanceInput.getText().toString());
+                            detectGPS();
+                        }
+                    });
+
+                    distanceDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    distanceDialog.create();
+
+                    distanceDialog.show();
                 }
             });
 
@@ -270,6 +301,8 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(new Intent(HomeActivity.this, PostActivity.class));
                 }
             });
+
+
 
 
 
@@ -545,12 +578,13 @@ public class HomeActivity extends AppCompatActivity {
                     currentLat =  location.getLatitude();
                     currentLon =  location.getLongitude();
 
+
                     // get filter helper instance with new itemlistData
                     ItemFilterHandler filterHelp = new ItemFilterHandler(itemListData);
 
 
                     // filter the itemList and set it to item List data
-                    ArrayList<HashMap<String,Object>>  filteredList = (ArrayList<HashMap<String,Object>>) filterHelp.nearByFilter(currentLat,currentLon,20);
+                    ArrayList<HashMap<String,Object>>  filteredList = (ArrayList<HashMap<String,Object>>) filterHelp.nearByFilter(currentLat,currentLon,inputDistance);
                     itemListData.clear();
                     itemListData.addAll(filteredList);
 
