@@ -25,7 +25,25 @@
             android:minHeight="?android:attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="?android:attr/actionBarSize"
+                android:src="@drawable/logo"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RentME"
+                android:textSize="32sp"
+                android:textColor="@color/appWhite"
+                fontPath="fonts/Baloo-Regular.ttf"
+                />
+
+        </android.support.v7.widget.Toolbar>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -50,6 +68,13 @@
             android:src="@drawable/homeimg"
             />
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/gradient_bg"
+                />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,8 +82,9 @@
                 android:layout_alignParentBottom="true"
                 android:text="Rent me today"
                 android:textSize="32sp"
-                android:textColor="#fff"
+                android:textColor="@color/appWhite"
                 android:paddingBottom="15dp"
+                fontPath="fonts/Baloo-Regular.ttf"
                 />
         </RelativeLayout>
 

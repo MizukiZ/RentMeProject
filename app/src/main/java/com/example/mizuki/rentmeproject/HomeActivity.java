@@ -52,6 +52,7 @@ import Helper.ItemListAdapter;
 import Model.Post;
 import Model.User;
 import dmax.dialog.SpotsDialog;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -91,12 +92,11 @@ public class HomeActivity extends AppCompatActivity {
     ArrayList<HashMap<String, Object>> itemListData = new ArrayList<>();
     SimpleAdapter itemListAdapter;
 
+
+    // for setting custom fonts(using library called Callingraphy)
     @Override
-    protected void onResume() {
-        super.onResume();
-//        if (currentUser != null) {
-//            Log.d("Userdata", currentUser.getEmail());
-//        }
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -148,6 +148,10 @@ public class HomeActivity extends AppCompatActivity {
             // set toolbar as actionbar(converting)
             setSupportActionBar(toolbar);
 
+            // remove the title form manifest lable
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            toolbar.setTitle("");
+            toolbar.setSubtitle("");
             // ask permission for the GPS use
             requestPermission();
 
@@ -431,6 +435,7 @@ public class HomeActivity extends AppCompatActivity {
             searchView.setQueryHint("What do you want to rent?");
 
 
+            // search on click event
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
