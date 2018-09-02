@@ -76,7 +76,7 @@
             android:id="@+id/btnRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#69DB74"
+            android:backgroundTint="@color/appGreen"
             android:text="Register" />
 
     </LinearLayout>

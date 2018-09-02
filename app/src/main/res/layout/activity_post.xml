@@ -26,7 +26,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:src="@android:drawable/ic_menu_camera"
-                android:background="@color/postButtonColor"
+                android:background="@color/appYellow"
                 android:scaleType="fitXY"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
@@ -133,7 +133,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:foreground="?android:attr/selectableItemBackground"
-            android:background="@color/postButtonColor"
+            android:background="@color/appYellow"
             android:text="Post this item"/>
 
         </LinearLayout>

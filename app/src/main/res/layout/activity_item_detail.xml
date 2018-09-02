@@ -234,7 +234,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:foreground="?android:attr/selectableItemBackground"
-            android:background="@color/sendMessageButtonColor"
+            android:background="@color/appGreen"
             android:text="Send Message"/>
 
     </LinearLayout>

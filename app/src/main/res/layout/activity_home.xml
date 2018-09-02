@@ -32,16 +32,15 @@
             android:layout_height="match_parent"
             >
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/homePostBtn"
                 android:layout_width="115dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="Post Item"
-                android:background="#E50303"
+                android:backgroundTint="@color/appDanger"
                 android:textColor="#fff"
                 android:layout_marginTop="10dp"
-                android:foreground="?android:attr/selectableItemBackground"
                 />
 
         <ImageView
@@ -65,15 +64,16 @@
 
         <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_height="270dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_margin="20dp"
             app:alignItems="flex_start"
             app:alignContent="flex_start"
             app:justifyContent="space_evenly"
             app:flexWrap="wrap"
-            android:background="#c4c4c4">
+            android:background="@drawable/border_line"
+            >
 
             <Button
                 android:id="@+id/sportsBtn"
@@ -83,7 +83,7 @@
                 android:layout_height="100dp"
                 android:paddingTop="10dp"
                 android:drawableTop="@drawable/sports"
-                android:background="#69DBDB"
+                android:background="@color/appBlue"
                 android:text="Sports"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
@@ -97,7 +97,7 @@
                 android:layout_height="100dp"
                 android:paddingTop="10dp"
                 android:drawableTop="@drawable/appliances"
-                android:background="#DBC269"
+                android:background="@color/appOrange"
                 android:text="Appiliances"
                 android:foreground="?android:attr/selectableItemBackground"                />
 
@@ -107,7 +107,7 @@
                 android:layout_width="0dp"
                 app:layout_flexBasisPercent="32%"
                 android:layout_height="100dp"
-                android:background="#69DB74"
+                android:background="@color/appGreen"
                 android:paddingTop="10dp"
                 android:drawableTop="@drawable/instrument"
                 android:text="Instruments"
@@ -122,7 +122,7 @@
                 android:layout_height="100dp"
                 android:paddingTop="10dp"
                 android:drawableTop="@drawable/clothes"
-                android:background="#DB69D0"
+                android:background="@color/appPink"
                 android:text="Clothes"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
@@ -136,7 +136,7 @@
                 android:layout_height="100dp"
                 android:paddingTop="10dp"
                 android:drawableTop="@drawable/tool"
-                android:background="#BEDB69"
+                android:background="@color/appYellow"
                 android:text="Tools"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
@@ -149,12 +149,12 @@
                 android:layout_height="100dp"
                 android:paddingTop="10dp"
                 android:drawableTop="@drawable/ride"
-                android:background="#DB9269"
+                android:background="@color/appRed"
                 android:text="Rides"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/nearByBtn"
                 android:layout_marginTop="5dp"
                 android:layout_width="30dp"
@@ -162,7 +162,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:text="Near by"
-                android:foreground="?android:attr/selectableItemBackground"
+                android:textColor="@color/appWhite"
+                android:backgroundTint="@color/appBlack"
                 />
 
             <Button

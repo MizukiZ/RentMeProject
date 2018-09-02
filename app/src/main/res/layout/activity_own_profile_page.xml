@@ -35,7 +35,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
                 android:src="@android:drawable/ic_menu_camera"
-                android:background="#69DBDB"
+                android:background="@color/appRed"
                 android:scaleType="fitXY"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
@@ -171,7 +171,7 @@
             android:id="@+id/btnUpdate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#69DBDB"
+            android:background="@color/appRed"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center"
             android:text="Update profile" />

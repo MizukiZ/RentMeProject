@@ -6,6 +6,13 @@
     <color name="toolbar">#89C8F6</color>
     <color name="appBackGround">#FFFFFF</color>
     <color name="hintText">#C4C4C4</color>
-    <color name="postButtonColor">#BEDB69</color>
-    <color name="sendMessageButtonColor">#69DB74</color>
+    <color name="appBlue">#69DBDB</color>
+    <color name="appOrange">#DBC269</color>
+    <color name="appGreen">#69DB74</color>
+    <color name="appPink">#DB69D0</color>
+    <color name="appYellow">#BEDB69</color>
+    <color name="appRed">#DB6969</color>
+    <color name="appDanger">#E50303</color>
+    <color name="appBlack">#343434</color>
+    <color name="appWhite">#FFFFFF</color>
 </resources>
