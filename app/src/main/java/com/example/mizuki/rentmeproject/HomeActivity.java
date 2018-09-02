@@ -264,7 +264,7 @@ public class HomeActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     // Create Distance filter dialog
-                    View cdialog = getLayoutInflater().inflate(R.layout.nearby_dialog, null);
+                    final View cdialog = getLayoutInflater().inflate(R.layout.nearby_dialog, null);
                     AlertDialog.Builder distanceDialog = new AlertDialog.Builder(HomeActivity.this);
                     distanceDialog.setTitle("Distance Filter");
                     distanceDialog.setView(cdialog);
