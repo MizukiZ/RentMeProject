@@ -178,9 +178,11 @@ public class HomeActivity extends AppCompatActivity {
 
                         // no result message
                         Toast.makeText(HomeActivity.this, "No result found", Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        String resultCount = String.valueOf(dataSnapshot.getChildrenCount());
+                        Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
                     }
-                    String resultCount = String.valueOf(dataSnapshot.getChildrenCount());
-                    Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
 
                     updateListVIew(dataSnapshot);
 
@@ -533,7 +535,6 @@ public class HomeActivity extends AppCompatActivity {
             db.child("Post").removeEventListener(updateEventListener);
             db.child("Post").removeEventListener(updateEventListener);
             db.child("Post").removeEventListener(updateEventListener);
-
 
             db.child("Post").orderByChild("title").startAt(query).endAt(query + "\uf8ff")
                     .addValueEventListener(updateEventListener);

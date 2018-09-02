@@ -124,7 +124,7 @@
                 android:paddingTop="10dp"
                 android:drawableTop="@drawable/appliances"
                 android:background="@color/appOrange"
-                android:text="Appiliances"
+                android:text="Appliances"
                 android:foreground="?android:attr/selectableItemBackground"                />
 
             <Button
