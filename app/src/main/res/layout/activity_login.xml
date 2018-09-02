@@ -23,7 +23,7 @@
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo_square" />
 
 
     <EditText
