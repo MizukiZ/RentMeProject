@@ -135,8 +135,8 @@ public class ItemDetailActivity extends AppCompatActivity {
                         null,
                         null,
                         postUser.getImage() != null ? postUser.getImage().toString() : null,
-                        postUser.getBio().toString(),
-                        postUser.getLocation()
+                        postUser.getBio() != null ? postUser.getBio().toString() : null,
+                        postUser.getLocation() != null ? postUser.getLocation() : null
                 );
 
                 // set post user name
@@ -144,7 +144,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
                 Picasso.get()
                         .load(user.getImage())
-                        .resize(500,300)
+                        .resize(500,500)
                         .placeholder(R.drawable.account)
                         .into(itemDetailUserImage);
             }

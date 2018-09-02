@@ -31,7 +31,7 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="?android:attr/actionBarSize"
-                android:src="@drawable/logo"
+                android:src="@drawable/logo_round"
                 />
 
             <TextView

@@ -64,7 +64,7 @@ public class ItemListAdapter extends SimpleAdapter {
         // Picasso setting
         Picasso.get()
                 .load(url)
-                .resize(150,150)
+                .resize(500,500)
                 .centerCrop()
                 .placeholder(R.drawable.loading_placeholder)
                 .into(img);
