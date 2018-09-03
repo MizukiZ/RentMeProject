@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.*;
 
 public class ItemFilterHandler {
 
@@ -20,6 +21,33 @@ public class ItemFilterHandler {
 
         this.data = itemListData;
     }
+
+
+    public List<HashMap<String, Object>> categoryFilter(String category) {
+
+        // filter the original itemdData by the category
+        List<HashMap<String, Object>> filteredata = Stream.of(data).filter(
+                item-> item.get("category").equals(category))
+                .collect(Collectors.toList());
+
+
+        return filteredata;
+    }
+
+
+    public List<HashMap<String, Object>> wordFilter(String query) {
+
+        // set regex pattern(case insensitive)
+        String regex = "(?i)(.*)"+ query +"(.*)";
+
+        // filter the original itemdData by the word
+        List<HashMap<String, Object>> filteredata = Stream.of(data).filter(
+                item-> item.get("title").toString().matches(regex))
+                .collect(Collectors.toList());
+
+        return filteredata;
+    }
+
 
 
     public List<HashMap<String, Object>> nearByFilter(Double cLat,Double cLon,int distance) {

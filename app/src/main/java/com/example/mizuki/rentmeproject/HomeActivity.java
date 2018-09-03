@@ -175,7 +175,6 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(!dataSnapshot.exists()){
-
                         // no result message
                         Toast.makeText(HomeActivity.this, "No result found", Toast.LENGTH_SHORT).show();
 
@@ -214,7 +213,6 @@ public class HomeActivity extends AppCompatActivity {
             sportBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    searchDialog.show();
                  categoryFilter("Sport");
                 }
             });
@@ -222,7 +220,6 @@ public class HomeActivity extends AppCompatActivity {
             appilianceBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    searchDialog.show();
                     categoryFilter("Appliance");
                 }
             });
@@ -230,7 +227,6 @@ public class HomeActivity extends AppCompatActivity {
             instrumentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    searchDialog.show();
                     categoryFilter("Instrument");
                 }
             });
@@ -238,7 +234,6 @@ public class HomeActivity extends AppCompatActivity {
             clotheBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    searchDialog.show();
                     categoryFilter("Clothe");
                 }
             });
@@ -246,7 +241,6 @@ public class HomeActivity extends AppCompatActivity {
             toolBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    searchDialog.show();
                     categoryFilter("Tool");
                 }
             });
@@ -254,7 +248,6 @@ public class HomeActivity extends AppCompatActivity {
             rideBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    searchDialog.show();
                     categoryFilter("Ride");
                 }
             });
@@ -391,7 +384,7 @@ public class HomeActivity extends AppCompatActivity {
             });
 
             // Attach a listener to read the user data
-            db.child("Users").addValueEventListener(new ValueEventListener() {
+            db.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -441,7 +434,6 @@ public class HomeActivity extends AppCompatActivity {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    searchDialog.show();
 
                     // when user submit the text
                     wordSearch(query);
@@ -488,13 +480,11 @@ public class HomeActivity extends AppCompatActivity {
 
 
                 itemListData.add(data);
-                ItemFilterHandler itemFilterHandler = new ItemFilterHandler(itemListData);
-
             }
             // set list view with the custom adapter
             listView.setAdapter(itemListAdapter);
 
-
+            // dismiss dialog
             searchDialog.dismiss();
         }
 
@@ -509,35 +499,49 @@ public class HomeActivity extends AppCompatActivity {
 
             if(category.equals("All")){
 
-                // remove previous listener
-                db.child("Post").removeEventListener(updateEventListener);
-                db.child("Post").removeEventListener(updateEventListener);
-                db.child("Post").removeEventListener(updateEventListener);
-
                 // when category all
-                db.child("Post").addValueEventListener(updateEventListener);
+                db.child("Post").addListenerForSingleValueEvent(updateEventListener);
 
             }else {
 
-                // remove previous listener
-                db.child("Post").removeEventListener(updateEventListener);
-                db.child("Post").removeEventListener(updateEventListener);
-                db.child("Post").removeEventListener(updateEventListener);
+                // get filter helper instance with new itemlistData
+                ItemFilterHandler filterHelp = new ItemFilterHandler(itemListData);
 
-                // when something but All
-                db.child("Post").orderByChild("category").equalTo(category).addValueEventListener(updateEventListener);
+
+                // filter the itemList and set it to item List data
+                ArrayList<HashMap<String,Object>>  filteredList = (ArrayList<HashMap<String,Object>>) filterHelp.categoryFilter(category);
+                itemListData.clear();
+                itemListData.addAll(filteredList);
+
+                int resultCount = itemListData.toArray().length;
+
+
+                // set list view with the custom adapter
+                listView.setAdapter(itemListAdapter);
+
+                Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
 
             }
         }
 
         public void wordSearch(String query){
            // remove previous listener
-            db.child("Post").removeEventListener(updateEventListener);
-            db.child("Post").removeEventListener(updateEventListener);
-            db.child("Post").removeEventListener(updateEventListener);
 
-            db.child("Post").orderByChild("title").startAt(query).endAt(query + "\uf8ff")
-                    .addValueEventListener(updateEventListener);
+            // get filter helper instance with new itemlistData
+            ItemFilterHandler filterHelp = new ItemFilterHandler(itemListData);
+
+
+            // filter the itemList and set it to item List data
+            ArrayList<HashMap<String,Object>>  filteredList = (ArrayList<HashMap<String,Object>>) filterHelp.wordFilter(query);
+            itemListData.clear();
+            itemListData.addAll(filteredList);
+
+            int resultCount = itemListData.toArray().length;
+
+            // set list view with the custom adapter
+            listView.setAdapter(itemListAdapter);
+
+            Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
         }
 
     public void detectGPS(){
