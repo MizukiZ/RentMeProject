@@ -283,7 +283,7 @@ public class HomeActivity extends AppCompatActivity {
                     // Create Distance filter dialog
                     final View cdialog = getLayoutInflater().inflate(R.layout.nearby_dialog, null);
                     AlertDialog.Builder distanceDialog = new AlertDialog.Builder(HomeActivity.this);
-                    distanceDialog.setTitle("Distance Filter");
+                    distanceDialog.setTitle("Distance Filter(km)");
                     distanceDialog.setView(cdialog);
 
                     // set positive button event
@@ -426,7 +426,7 @@ public class HomeActivity extends AppCompatActivity {
 
             // set all of them as default
             categoryFilter("init");
-
+            addFilterChip(4, "reset");
         }
 
     }
