@@ -76,7 +76,7 @@ public class HomeActivity extends AppCompatActivity {
     private SearchView searchView;
     private MenuItem searchItem;
 
-    private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn, resetBtn , nearByBtn ,homePostBtn;
+    private Button sportBtn, appilianceBtn, instrumentBtn, clotheBtn, toolBtn, rideBtn, resetBtn, nearByBtn, homePostBtn;
 
     android.app.AlertDialog searchDialog;
 
@@ -88,9 +88,8 @@ public class HomeActivity extends AppCompatActivity {
 
     boolean defaultData;
 
-    private Double currentLat,currentLon;
+    private Double currentLat, currentLon;
 
-    
 
     ValueEventListener updateEventListener;
 
@@ -99,7 +98,12 @@ public class HomeActivity extends AppCompatActivity {
     List<Chip> chipList;
     ChipView chipDefault;
 
+    String searchQuery;
 
+    HashMap<String, String> filterCriteria;
+
+
+    ArrayList<HashMap<String, Object>> originalItemListData = new ArrayList<>();
     ArrayList<HashMap<String, Object>> itemListData = new ArrayList<>();
     SimpleAdapter itemListAdapter;
 
@@ -140,6 +144,12 @@ public class HomeActivity extends AppCompatActivity {
             homePostBtn = findViewById(R.id.homePostBtn);
             chipList = new ArrayList<>();
             chipDefault = findViewById(R.id.chipview);
+
+            // set initial criteria
+            filterCriteria = new HashMap<String, String>();
+            filterCriteria.put("category", "all");
+            filterCriteria.put("distance", "all");
+            filterCriteria.put("word", "all");
 
             defaultData = true;
 
@@ -184,24 +194,15 @@ public class HomeActivity extends AppCompatActivity {
 
             searchDialog.show();
 
-
-
-//            chipList.add(new filterChip("40"));
-//            chipList.add(new filterChip("Sport"));
-//            chipList.add(new filterChip("mower"));
-//            ChipView chipDefault = (ChipView) findViewById(R.id.chipview);
-//            chipDefault.setChipList(chipList);
-
-
             // set update event listener
             updateEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(!dataSnapshot.exists()){
+                    if (!dataSnapshot.exists()) {
                         // no result message
                         Toast.makeText(HomeActivity.this, "No result found", Toast.LENGTH_SHORT).show();
 
-                    }else {
+                    } else {
                         String resultCount = String.valueOf(dataSnapshot.getChildrenCount());
                         Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
                     }
@@ -236,7 +237,7 @@ public class HomeActivity extends AppCompatActivity {
             sportBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                 categoryFilter("Sport");
+                    categoryFilter("Sport");
                 }
             });
 
@@ -314,7 +315,11 @@ public class HomeActivity extends AppCompatActivity {
                     searchDialog.show();
                     categoryFilter("init");
 
-                    addFilterChip(4,"reset");
+                    filterCriteria.put("category", "all");
+                    filterCriteria.put("distance", "all");
+                    filterCriteria.put("word", "all");
+
+                    addFilterChip(4, "reset");
                 }
             });
 
@@ -325,10 +330,6 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(new Intent(HomeActivity.this, PostActivity.class));
                 }
             });
-
-
-
-
 
 
             // click event for the navigation items
@@ -350,7 +351,7 @@ public class HomeActivity extends AppCompatActivity {
 
                             // set user id
                             currentUser.setId(userId);
-                            ownProfilePageIntent.putExtra("user",currentUser.toHashData());
+                            ownProfilePageIntent.putExtra("user", currentUser.toHashData());
                             HomeActivity.this.startActivity(ownProfilePageIntent);
                             return true;
 
@@ -428,160 +429,131 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
-        }
+    }
 
 
-        @Override
-        public boolean onOptionsItemSelected (MenuItem item){
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-            if (actionBarDrawerToggle.onOptionsItemSelected(item))
-                return true;
-
-            return super.onOptionsItemSelected(item);
-        }
-
-        // Menu init
-        @Override
-        public boolean onCreateOptionsMenu (Menu menu){
-
-            // get searchview menu file and set to menu
-            getMenuInflater().inflate(R.menu.searchview_menu, menu);
-
-            // activate search item
-            searchItem = menu.findItem(R.id.itemSearch);
-            searchView = (SearchView) searchItem.getActionView();
-
-            // set hint text
-            searchView.setQueryHint("What do you want to rent?");
-
-
-            // search on click event
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-
-                    // when user submit the text
-                    wordSearch(query);
-
-                    // make empty and close the search field
-                    searchView.clearFocus();
-                    searchItem.collapseActionView();
-
-                    return true;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    // when user inputs text
-                    return false;
-                }
-            });
-
+        if (actionBarDrawerToggle.onOptionsItemSelected(item))
             return true;
-        }
 
-        public void updateListVIew(DataSnapshot dataSnapshot){
+        return super.onOptionsItemSelected(item);
+    }
 
-            // reset the list
-            itemListData.clear();
+    // Menu init
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-            // loop the data to generate item list array
-            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+        // get searchview menu file and set to menu
+        getMenuInflater().inflate(R.menu.searchview_menu, menu);
 
-                Post post = snapshot.getValue(Post.class);
+        // activate search item
+        searchItem = menu.findItem(R.id.itemSearch);
+        searchView = (SearchView) searchItem.getActionView();
 
-                HashMap<String, Object> data = new HashMap<>();
-                data.put("image", post.getImage());
-                data.put("description", post.getDescription());
-                data.put("id", post.getId());
-                data.put("category", post.getCategory());
-                data.put("location", post.getLocation());
-                data.put("title", post.getTitle());
-                data.put("price", post.getCost());
-                data.put("rented", post.isRented());
-                data.put("created_at", post.getCreated_at());
-                data.put("updated_at", post.getUpdated_at());
-                data.put("user_id", post.getUser_id());
+        // set hint text
+        searchView.setQueryHint("What do you want to rent?");
 
 
-                itemListData.add(data);
-            }
-            // set list view with the custom adapter
-            listView.setAdapter(itemListAdapter);
+        // search on click event
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
 
-            // dismiss dialog
-            searchDialog.dismiss();
-        }
+                searchQuery = query;
 
-        public void categoryFilter(String category){
+                // when user submit the text
+                wordSearch(searchQuery);
 
-        // add filer chip
-            if(category.equals("init")){
-                addFilterChip(4,"reset");
-            }else{
-              addFilterChip(1,category);
-            }
-
-
-        // empty search field
-            if(searchView != null) {
                 // make empty and close the search field
                 searchView.clearFocus();
                 searchItem.collapseActionView();
+
+                return true;
             }
 
-            if(category.equals("init")){
-
-                // when category all
-                db.child("Post").addListenerForSingleValueEvent(updateEventListener);
-
-            }else {
-
-                // get filter helper instance with new itemlistData
-                ItemFilterHandler filterHelp = new ItemFilterHandler(itemListData);
-
-
-                // filter the itemList and set it to item List data
-                ArrayList<HashMap<String,Object>>  filteredList = (ArrayList<HashMap<String,Object>>) filterHelp.categoryFilter(category);
-                itemListData.clear();
-                itemListData.addAll(filteredList);
-
-                int resultCount = itemListData.toArray().length;
-
-
-                // set list view with the custom adapter
-                listView.setAdapter(itemListAdapter);
-
-                Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
-
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // when user inputs text
+                return false;
             }
+        });
+
+        return true;
+    }
+
+    public void updateListVIew(DataSnapshot dataSnapshot) {
+
+        // reset the both list
+        originalItemListData.clear();
+        itemListData.clear();
+
+        // loop the data to generate item list array
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+            Post post = snapshot.getValue(Post.class);
+
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("image", post.getImage());
+            data.put("description", post.getDescription());
+            data.put("id", post.getId());
+            data.put("category", post.getCategory());
+            data.put("location", post.getLocation());
+            data.put("title", post.getTitle());
+            data.put("price", post.getCost());
+            data.put("rented", post.isRented());
+            data.put("created_at", post.getCreated_at());
+            data.put("updated_at", post.getUpdated_at());
+            data.put("user_id", post.getUser_id());
+
+            // set both original and itemListdata for adapter
+            originalItemListData.add(data);
+            itemListData.add(data);
+        }
+        // set list view with the custom adapter
+        listView.setAdapter(itemListAdapter);
+
+        // dismiss dialog
+        searchDialog.dismiss();
+    }
+
+    public void categoryFilter(String category) {
+
+        //set new criteria for category
+        filterCriteria.put("category", category);
+
+
+        // empty search field
+        if (searchView != null) {
+            // make empty and close the search field
+            searchView.clearFocus();
+            searchItem.collapseActionView();
         }
 
-        public void wordSearch(String query){
+        if (category.equals("init")) {
 
+            // when category all
+            db.child("Post").addListenerForSingleValueEvent(updateEventListener);
 
-            addFilterChip(3,query);
+        } else {
 
-            // get filter helper instance with new itemlistData
-            ItemFilterHandler filterHelp = new ItemFilterHandler(itemListData);
+            combineFilterCriteria();
 
-
-            // filter the itemList and set it to item List data
-            ArrayList<HashMap<String,Object>>  filteredList = (ArrayList<HashMap<String,Object>>) filterHelp.wordFilter(query);
-            itemListData.clear();
-            itemListData.addAll(filteredList);
-
-            int resultCount = itemListData.toArray().length;
-
-            // set list view with the custom adapter
-            listView.setAdapter(itemListAdapter);
-
-            Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
         }
+    }
 
-    public void detectGPS(){
+    public void wordSearch(String query) {
 
-        if(gpsPermission) {
+        //set new criteria for word
+        filterCriteria.put("word", query);
+
+        combineFilterCriteria();
+    }
+
+    public void detectGPS() {
+
+        if (gpsPermission) {
             final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 // gps is off
@@ -596,14 +568,14 @@ public class HomeActivity extends AppCompatActivity {
                 // call get location func
                 getCurrentLocation();
             }
-        }else{
+        } else {
             // no permission handling
             Toast.makeText(this, "Please accept GPS permission", Toast.LENGTH_SHORT).show();
 
         }
     }
 
-    public void getCurrentLocation(){
+    public void getCurrentLocation() {
 
         // validation
         if (ActivityCompat.checkSelfPermission(HomeActivity.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -620,29 +592,12 @@ public class HomeActivity extends AppCompatActivity {
                 } else {
 
                     // set current latitude and longitude
-                    currentLat =  location.getLatitude();
-                    currentLon =  location.getLongitude();
+                    currentLat = location.getLatitude();
+                    currentLon = location.getLongitude();
 
+                    filterCriteria.put("distance", String.valueOf(inputDistance));
 
-                    // get filter helper instance with new itemlistData
-                    ItemFilterHandler filterHelp = new ItemFilterHandler(itemListData);
-
-                    // add filter chip
-                    addFilterChip(2,String.valueOf(inputDistance));
-
-
-                    // filter the itemList and set it to item List data
-                    ArrayList<HashMap<String,Object>>  filteredList = (ArrayList<HashMap<String,Object>>) filterHelp.nearByFilter(currentLat,currentLon,inputDistance);
-                    itemListData.clear();
-                    itemListData.addAll(filteredList);
-
-                    int resultCount = itemListData.toArray().length;
-
-
-                    // set list view with the custom adapter
-                    listView.setAdapter(itemListAdapter);
-
-                    Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
+                    combineFilterCriteria();
 
                 }
             }
@@ -650,11 +605,100 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void addFilterChip(int type , String title){
+    public void combineFilterCriteria() {
+
+        //reset all chips
+        addFilterChip(4, "reset");
+
+        boolean notFirstOne = false;
+        int index = 1;
+
+        // add filer chip
+        for (Object key : filterCriteria.keySet()) {
+            String value = filterCriteria.get(key);
+
+            if(!value.equals("all")){
+                addFilterChip(index,filterCriteria.get(key));
+            }
+            index++;
+        }
+
+
+        ArrayList<HashMap<String, Object>> filterResult = new ArrayList<>();
+        ;
+
+        // get filter helper instance with new originalItemListData
+        ItemFilterHandler filterHelp = new ItemFilterHandler(originalItemListData);
+
+        if (!filterCriteria.get("category").equals("all")) {
+
+            notFirstOne = true;
+
+            // there is a category filter
+            filterResult = (ArrayList<HashMap<String, Object>>) filterHelp.categoryFilter(filterCriteria.get("category").toString());
+        }
+
+        if (!filterCriteria.get("distance").equals("all")) {
+
+            if (notFirstOne) {
+                //if not first filter, combine with previous result
+
+                // get filter helper instance with new itemlistData
+                ItemFilterHandler filterHelp2 = new ItemFilterHandler(filterResult);
+                // there is a distance filter
+                filterResult = (ArrayList<HashMap<String, Object>>) filterHelp2.nearByFilter(
+                        currentLat,
+                        currentLon,
+                        Integer.valueOf(filterCriteria.get("distance").toString()));
+
+            } else {
+                notFirstOne = true;
+
+                // this is first filter so use original
+                filterResult = (ArrayList<HashMap<String, Object>>) filterHelp.nearByFilter(
+                        currentLat,
+                        currentLon,
+                        Integer.valueOf(filterCriteria.get("distance").toString()));
+            }
+
+        }
+
+        if (!filterCriteria.get("word").equals("all")) {
+
+            if (notFirstOne) {
+                //if not first filter, combine with previous result
+
+                // get filter helper instance with new itemlistData
+                ItemFilterHandler filterHelp3 = new ItemFilterHandler(filterResult);
+                // there is a distance filter
+                filterResult = (ArrayList<HashMap<String, Object>>) filterHelp3.wordFilter(searchQuery);
+
+            } else {
+
+                // this is first filter so use original
+                filterResult = (ArrayList<HashMap<String, Object>>) filterHelp.wordFilter(searchQuery);
+            }
+        }
+
+        itemListData.clear();
+        itemListData.addAll(filterResult);
+
+        int resultCount = itemListData.toArray().length;
+
+
+        // set list view with the custom adapter
+        listView.setAdapter(itemListAdapter);
+
+        Toast.makeText(HomeActivity.this, resultCount + " result found", Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    public void addFilterChip(int type, String title) {
 
 
         // reset all
-        if(title.equals("reset")){
+        if (title.equals("reset")) {
 
             defaultData = true;
 
@@ -667,9 +711,9 @@ public class HomeActivity extends AppCompatActivity {
         }
 
 
-        if(type == 1){
+        if (type == 1) {
 
-            if(defaultData){
+            if (defaultData) {
                 chipList.clear();
             }
 
@@ -680,9 +724,9 @@ public class HomeActivity extends AppCompatActivity {
             // add new chip to the chip list array
             chipList.add(new filterChip(categoryTitle));
             chipDefault.setChipList(chipList);
-        } else if(type == 2){
+        } else if (type == 2) {
 
-            if(defaultData){
+            if (defaultData) {
                 chipList.clear();
             }
 
@@ -694,9 +738,9 @@ public class HomeActivity extends AppCompatActivity {
             // add new chip to the chip list array
             chipList.add(new filterChip(categoryTitle));
             chipDefault.setChipList(chipList);
-        } else if(type == 3){
+        } else if (type == 3) {
 
-            if(defaultData){
+            if (defaultData) {
                 chipList.clear();
             }
 
@@ -713,8 +757,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // request permission to users
-    public void requestPermission(){
-        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION},GPS_PERMISSION_CODE);
+    public void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, GPS_PERMISSION_CODE);
     }
 
     // get result from request permission
@@ -722,8 +766,8 @@ public class HomeActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode){
-            case GPS_PERMISSION_CODE:{
+        switch (requestCode) {
+            case GPS_PERMISSION_CODE: {
 
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
@@ -737,7 +781,6 @@ public class HomeActivity extends AppCompatActivity {
                 } else {
 
                     // permission denied, boo!
-                    Log.d("Permission result", "denied");
                     gpsPermission = false;
                 }
                 return;
