@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -40,15 +42,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.plumillonforge.android.chipview.Chip;
+import com.plumillonforge.android.chipview.ChipView;
 
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import Helper.ItemFilterHandler;
 import Helper.ItemListAdapter;
+import Helper.filterChip;
 import Model.Post;
 import Model.User;
 import dmax.dialog.SpotsDialog;
@@ -80,6 +86,8 @@ public class HomeActivity extends AppCompatActivity {
     final int GPS_PERMISSION_CODE = 44;
     boolean gpsPermission = false;
 
+    boolean defaultData;
+
     private Double currentLat,currentLon;
 
     
@@ -87,6 +95,9 @@ public class HomeActivity extends AppCompatActivity {
     ValueEventListener updateEventListener;
 
     private FusedLocationProviderClient locationClient;
+
+    List<Chip> chipList;
+    ChipView chipDefault;
 
 
     ArrayList<HashMap<String, Object>> itemListData = new ArrayList<>();
@@ -127,6 +138,10 @@ public class HomeActivity extends AppCompatActivity {
             resetBtn = findViewById(R.id.resetBtn);
             nearByBtn = findViewById(R.id.nearByBtn);
             homePostBtn = findViewById(R.id.homePostBtn);
+            chipList = new ArrayList<>();
+            chipDefault = findViewById(R.id.chipview);
+
+            defaultData = true;
 
             listView = findViewById(R.id.listview1);
 
@@ -168,6 +183,14 @@ public class HomeActivity extends AppCompatActivity {
                     .build();
 
             searchDialog.show();
+
+
+
+//            chipList.add(new filterChip("40"));
+//            chipList.add(new filterChip("Sport"));
+//            chipList.add(new filterChip("mower"));
+//            ChipView chipDefault = (ChipView) findViewById(R.id.chipview);
+//            chipDefault.setChipList(chipList);
 
 
             // set update event listener
@@ -289,7 +312,9 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     searchDialog.show();
-                    categoryFilter("All");
+                    categoryFilter("init");
+
+                    addFilterChip(4,"reset");
                 }
             });
 
@@ -399,7 +424,7 @@ public class HomeActivity extends AppCompatActivity {
             });
 
             // set all of them as default
-            categoryFilter("All");
+            categoryFilter("init");
 
         }
 
@@ -490,14 +515,22 @@ public class HomeActivity extends AppCompatActivity {
 
         public void categoryFilter(String category){
 
-            // empty search field
+        // add filer chip
+            if(category.equals("init")){
+                addFilterChip(4,"reset");
+            }else{
+              addFilterChip(1,category);
+            }
+
+
+        // empty search field
             if(searchView != null) {
                 // make empty and close the search field
                 searchView.clearFocus();
                 searchItem.collapseActionView();
             }
 
-            if(category.equals("All")){
+            if(category.equals("init")){
 
                 // when category all
                 db.child("Post").addListenerForSingleValueEvent(updateEventListener);
@@ -525,7 +558,9 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         public void wordSearch(String query){
-           // remove previous listener
+
+
+            addFilterChip(3,query);
 
             // get filter helper instance with new itemlistData
             ItemFilterHandler filterHelp = new ItemFilterHandler(itemListData);
@@ -592,6 +627,9 @@ public class HomeActivity extends AppCompatActivity {
                     // get filter helper instance with new itemlistData
                     ItemFilterHandler filterHelp = new ItemFilterHandler(itemListData);
 
+                    // add filter chip
+                    addFilterChip(2,String.valueOf(inputDistance));
+
 
                     // filter the itemList and set it to item List data
                     ArrayList<HashMap<String,Object>>  filteredList = (ArrayList<HashMap<String,Object>>) filterHelp.nearByFilter(currentLat,currentLon,inputDistance);
@@ -610,6 +648,68 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void addFilterChip(int type , String title){
+
+
+        // reset all
+        if(title.equals("reset")){
+
+            defaultData = true;
+
+            // clear chip list array and set
+            chipList.clear();
+
+            chipList.add(new filterChip("All"));
+            chipDefault.setChipList(chipList);
+            return;
+        }
+
+
+        if(type == 1){
+
+            if(defaultData){
+                chipList.clear();
+            }
+
+            defaultData = false;
+            // category chips
+            String categoryTitle = "Category: " + title;
+
+            // add new chip to the chip list array
+            chipList.add(new filterChip(categoryTitle));
+            chipDefault.setChipList(chipList);
+        } else if(type == 2){
+
+            if(defaultData){
+                chipList.clear();
+            }
+
+            defaultData = false;
+
+            // distance chips
+            String categoryTitle = "Distance: " + title + "km";
+
+            // add new chip to the chip list array
+            chipList.add(new filterChip(categoryTitle));
+            chipDefault.setChipList(chipList);
+        } else if(type == 3){
+
+            if(defaultData){
+                chipList.clear();
+            }
+
+            defaultData = false;
+
+
+            // word chips
+            String categoryTitle = "Free word: " + title;
+
+            // add new chip to the chip list array
+            chipList.add(new filterChip(categoryTitle));
+            chipDefault.setChipList(chipList);
+        }
     }
 
     // request permission to users

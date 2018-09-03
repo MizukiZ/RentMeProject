@@ -48,6 +48,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
             >
 
             <android.support.v7.widget.AppCompatButton
@@ -87,6 +88,26 @@
                 fontPath="fonts/Baloo-Regular.ttf"
                 />
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filter criteria"
+            android:textColor="@color/hintText"
+            android:layout_gravity="center"
+            />
+
+        <com.plumillonforge.android.chipview.ChipView
+            android:id="@+id/chipview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:chip_background="@color/toolbar"
+            app:chip_side_padding="10dp"
+            app:chip_corner_radius="3dp"
+            app:chip_spacing="5dp"
+            android:layout_gravity="center"
+            />
 
         <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
