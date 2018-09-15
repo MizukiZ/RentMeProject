@@ -520,9 +520,6 @@ public class HomeActivity extends AppCompatActivity {
 
     public void categoryFilter(String category) {
 
-        //set new criteria for category
-        filterCriteria.put("category", category);
-
 
         // empty search field
         if (searchView != null) {
@@ -533,10 +530,13 @@ public class HomeActivity extends AppCompatActivity {
 
         if (category.equals("init")) {
 
-            // when category all
+            // when category init get all data
             db.child("Post").addListenerForSingleValueEvent(updateEventListener);
 
         } else {
+
+            //set new criteria for category
+            filterCriteria.put("category", category);
 
             combineFilterCriteria();
 
@@ -611,16 +611,25 @@ public class HomeActivity extends AppCompatActivity {
         addFilterChip(4, "reset");
 
         boolean notFirstOne = false;
-        int index = 1;
+
 
         // add filer chip
         for (Object key : filterCriteria.keySet()) {
             String value = filterCriteria.get(key);
 
             if(!value.equals("all")){
+                int index;
+                if(key.equals("category")){
+                    index = 1;
+                }else if(key.equals("distance")){
+                    index = 2;
+                }else {
+                    index = 3;
+                }
+
                 addFilterChip(index,filterCriteria.get(key));
             }
-            index++;
+
         }
 
 
