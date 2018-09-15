@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,6 +18,7 @@
     android:background="@drawable/border_line"
     android:orientation="vertical"
     android:padding="15dp">
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,51 +29,66 @@
         android:layout_marginBottom="10dp"
         />
 
-    <ImageView
-        android:id="@+id/imgLogo"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/logo_square" />
-
-    <EditText
-        android:id="@+id/edtUserName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="User name"
-        android:inputType="text"
-        android:text=""
-        android:textColorHint="@color/hintText"
-        android:textSize="20sp" />
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/edtEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:text=""
-        android:textColorHint="@color/hintText"
-        android:textSize="20sp" />
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="150dp"
+            android:layout_height="110dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/logo_square" />
 
-    <EditText
-        android:id="@+id/edtPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:text=""
-        android:textColorHint="@color/hintText"
-        android:textSize="20sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edtUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="User name"
+                android:inputType="text"
+                android:text=""
+                android:textColorHint="@color/hintText"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:text=""
+                android:textColorHint="@color/hintText"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:text=""
+                android:textColorHint="@color/hintText"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="center"
         android:layout_marginBottom="20dp"
 
         android:orientation="horizontal">
@@ -88,5 +115,8 @@
         android:text="Already have an account?"
         android:textColor="@color/colorPrimary" />
 
-
 </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
