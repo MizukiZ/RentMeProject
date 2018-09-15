@@ -133,12 +133,12 @@ public class ItemDetailActivity extends AppCompatActivity {
                 // create user instance
                 user = new User(
                         post.getUser_id(),
-                        postUser.getUserName().toString(),
+                        postUser.getUserName(),
                         null, // no need
                         null, // no need
-                        postUser.getImage() != null ? postUser.getImage().toString() : null,
-                        postUser.getBio() != null ? postUser.getBio().toString() : null,
-                        postUser.getLocation() != null ? postUser.getLocation() : null
+                        postUser.getImage(),
+                        postUser.getBio(),
+                        postUser.getLocation()
                 );
 
                 // set post user name

@@ -153,7 +153,7 @@ public class HomeActivity extends AppCompatActivity {
 
             defaultData = true;
 
-            listView = findViewById(R.id.listview1);
+            listView = findViewById(R.id.itemListView);
 
             // firebase
             db = FirebaseDatabase.getInstance().getReference();
