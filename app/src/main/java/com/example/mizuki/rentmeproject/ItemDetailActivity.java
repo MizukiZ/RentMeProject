@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +40,8 @@ public class ItemDetailActivity extends AppCompatActivity {
     ImageView itemImage,itemDetailUserImage;
     TextView itemTitle,itemPostTime,itemDescription,itemPrice,postUserName,itemDetailLocation;
     Post post;
-    User postUser;
+    User postUser,user;
+
 
     private DatabaseReference userDB;
 
@@ -129,11 +131,11 @@ public class ItemDetailActivity extends AppCompatActivity {
                 postUser = dataSnapshot.child(post.getUser_id()).getValue(User.class);
 
                 // create user instance
-                User user = new User(
-                        null,
+                user = new User(
+                        post.getUser_id(),
                         postUser.getUserName().toString(),
-                        null,
-                        null,
+                        null, // no need
+                        null, // no need
                         postUser.getImage() != null ? postUser.getImage().toString() : null,
                         postUser.getBio() != null ? postUser.getBio().toString() : null,
                         postUser.getLocation() != null ? postUser.getLocation() : null
@@ -152,6 +154,20 @@ public class ItemDetailActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        // set click event for clicking post user icon
+        itemDetailUserImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // jump to post user page
+
+                Intent postUserPageIntent = new Intent(ItemDetailActivity.this, PostUserActivity.class);
+                Bundle userOb = new Bundle();
+                userOb.putSerializable("userObject",user);
+                postUserPageIntent.putExtras(userOb);
+                ItemDetailActivity.this.startActivity(postUserPageIntent);
             }
         });
 
