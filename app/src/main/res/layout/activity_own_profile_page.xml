@@ -40,9 +40,10 @@
                 android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
-                android:src="@android:drawable/ic_menu_camera"
+                android:src="@drawable/camera"
                 android:background="@color/appRed"
                 android:scaleType="fitXY"
+                android:padding="5dp"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
 

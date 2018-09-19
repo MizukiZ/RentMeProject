@@ -132,7 +132,7 @@ public class PostUserActivity extends AppCompatActivity {
         Picasso.get()
                 .load(user.getImage())
                 .resize(600,500)
-                .placeholder(R.drawable.account)
+                .placeholder(R.drawable.placeholder)
                 .into(postUserImage);
 
 

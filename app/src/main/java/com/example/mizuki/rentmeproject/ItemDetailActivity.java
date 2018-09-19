@@ -148,7 +148,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                 Picasso.get()
                         .load(user.getImage())
                         .resize(500,500)
-                        .placeholder(R.drawable.account)
+                        .placeholder(R.drawable.placeholder)
                         .into(itemDetailUserImage);
             }
 

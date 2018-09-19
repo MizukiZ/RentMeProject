@@ -128,7 +128,7 @@ public class OwnProfilePage extends AppCompatActivity {
             Picasso.get()
                     .load(userData.get("image").toString())
                     .resize(500, 300)
-                    .placeholder(R.drawable.account)
+                    .placeholder(R.drawable.placeholder)
                     .into(ownImg);
         }else{
 

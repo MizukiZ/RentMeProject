@@ -31,9 +31,10 @@
                 android:id="@+id/postCamera"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:src="@android:drawable/ic_menu_camera"
+                android:src="@drawable/camera"
                 android:background="@color/appYellow"
                 android:scaleType="fitXY"
+                android:padding="10dp"
                 android:foreground="?android:attr/selectableItemBackground"
                 />
 

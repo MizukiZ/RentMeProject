@@ -64,14 +64,14 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="400dp"
             android:scaleType="fitXY"
             android:src="@drawable/homeimg"
             />
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="400dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/gradient_bg"
                 />
@@ -82,7 +82,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
                 android:text="Rent me today"
-                android:textSize="32sp"
+                android:textSize="40sp"
                 android:textColor="@color/appWhite"
                 android:paddingBottom="15dp"
                 fontPath="fonts/Baloo-Regular.ttf"
@@ -234,8 +234,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
-            android:dividerHeight="60dp"
-            android:layout_margin="60dp"
+            android:dividerHeight="20dp"
+            android:layout_margin="110dp"
             android:isScrollContainer="false"
             android:divider="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
