@@ -101,7 +101,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
         Picasso.get()
                 .load(itemHash.get("image").toString())
-                .resize(500,300)
+                .resize(600,400)
                 .placeholder(R.drawable.loading_placeholder)
                 .into(itemImage);
 
@@ -144,6 +144,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                 // set post user name
                 postUserName.setText(postUser.getUserName());
 
+                // user image
                 Picasso.get()
                         .load(user.getImage())
                         .resize(500,500)
