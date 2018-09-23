@@ -50,6 +50,24 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Rented"
+                android:layout_marginLeft="8dp"
+                />
+
+            <Switch
+                android:id="@+id/rentToggle"
+                android:textOff="off"
+                android:textOn="on"
+                android:showText="true"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Category"
                 android:layout_marginLeft="8dp"
                 android:textColorHint="@color/hintText"

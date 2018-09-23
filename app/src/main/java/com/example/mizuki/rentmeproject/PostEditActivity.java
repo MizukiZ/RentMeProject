@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.common.util.ArrayUtils;
@@ -55,6 +56,7 @@ public class PostEditActivity extends AppCompatActivity {
     ImageButton editPostImageBtn;
     ImageView postImage;
     Spinner postCategory;
+    Switch rentToggle;
 
     static final int AUTO_COMP_REQ_CODE = 1;
 
@@ -89,6 +91,7 @@ public class PostEditActivity extends AppCompatActivity {
         editPostImageBtn = findViewById(R.id.editPostCamera);
         postImage = findViewById(R.id.editUploadPhoto);
         postCategory = findViewById(R.id.editCategory_spinner);
+        rentToggle = findViewById(R.id.rentToggle);
 
         //set category array
         categoryArray = new String[]{"Sport","Appliance","Instrument","Clothe","Tool","Ride"};
@@ -136,6 +139,7 @@ public class PostEditActivity extends AppCompatActivity {
         postEditCost.setText(post.getCost().toString());
         postEditLocation.setText(geocodeHandler.getPlaceName());
         postEditDescription.setText(post.getDescription());
+        rentToggle.setChecked(post.isRented());
 
         Picasso.get()
                 .load(itemData.get("image").toString())
@@ -160,6 +164,7 @@ public class PostEditActivity extends AppCompatActivity {
                 String category = postCategory.getSelectedItem().toString();
                 String costField = postEditCost.getText().toString();
                 String locationField = postEditLocation.getText().toString();
+                boolean isRented = rentToggle.isChecked();
 
                 if(title.isEmpty() || description.isEmpty() || costField.isEmpty() || locationField.isEmpty()){
                     updatingDialog.dismiss();
@@ -212,7 +217,7 @@ public class PostEditActivity extends AppCompatActivity {
                                         category,
                                         itemData.get("user_id").toString(), // doesn't change
                                         cost,
-                                        (boolean)itemData.get("rented"),
+                                        isRented,
                                         itemData.get("created_at").toString(),
                                         ServerValue.TIMESTAMP
                                 );
@@ -254,7 +259,7 @@ public class PostEditActivity extends AppCompatActivity {
                             category,
                             itemData.get("user_id").toString(), // doesn't change
                             cost,
-                            (boolean)itemData.get("rented"),
+                            isRented,
                             itemData.get("created_at").toString(),
                             ServerValue.TIMESTAMP
                     );
