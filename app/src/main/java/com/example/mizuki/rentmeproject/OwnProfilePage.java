@@ -263,7 +263,7 @@ public class OwnProfilePage extends AppCompatActivity {
                             newName,
                             userData.get("email").toString(),
                             userData.get("password").toString(),
-                            userData.get("image") != null ? userData.get("image") .toString() : null,
+                            userData.get("image") != null ? userData.get("image").toString() : null,
                             newBio,
                             location
                     );

@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +14,8 @@ import android.widget.PopupMenu;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +23,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +42,7 @@ public class OwnPostItemsActivity extends AppCompatActivity {
     private DatabaseReference db;
     FirebaseUser currentFirebaseUser;
     String userID;
+    FirebaseStorage storage;
 
     PopupMenu popupMenu;
 
@@ -56,6 +60,7 @@ public class OwnPostItemsActivity extends AppCompatActivity {
         // get current user object and get user id
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
         userID = currentFirebaseUser.getUid();
+        storage = FirebaseStorage.getInstance();
 
 
         // make instance of custom simple adapter and put data in
@@ -128,9 +133,9 @@ public class OwnPostItemsActivity extends AppCompatActivity {
                         switch (operation){
                             case("EDIT"):
 
-                                Intent detailPageIntent = new Intent(OwnPostItemsActivity.this, ItemDetailActivity.class);
-                                detailPageIntent.putExtra("itemObject", itemObject);
-                                OwnPostItemsActivity.this.startActivity(detailPageIntent);
+                                Intent editPageIntent = new Intent(OwnPostItemsActivity.this, PostEditActivity.class);
+                                editPageIntent.putExtra("itemObject", itemObject);
+                                OwnPostItemsActivity.this.startActivity(editPageIntent);
 
                                 return true;
                             case("DELETE"):
@@ -148,6 +153,11 @@ public class OwnPostItemsActivity extends AppCompatActivity {
 
                                                 db.child("Post").child(itemObject.get("id").toString()).removeValue();
 
+                                                // Create a storage reference from our app
+                                                StorageReference imgRef = storage.getReferenceFromUrl(itemObject.get("image").toString());
+
+                                                // delete the corresponding image
+                                                imgRef.delete();
                                             }
                                         });
 
