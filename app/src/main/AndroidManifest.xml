@@ -44,8 +44,9 @@
 
         <activity
             android:name=".OwnProfilePage"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".PostUserActivity"></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".PostUserActivity" />
+        <activity android:name=".OwnPostItemsActivity"></activity>
     </application>
 
 </manifest>

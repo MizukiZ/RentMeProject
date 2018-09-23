@@ -361,7 +361,8 @@ public class HomeActivity extends AppCompatActivity {
                             return true;
 
                         case R.id.itemPostbox:
-                            Toast.makeText(HomeActivity.this, "Postbox", Toast.LENGTH_SHORT).show();
+                            //  redirect to new post page
+                            startActivity(new Intent(HomeActivity.this, OwnPostItemsActivity.class));
                             return true;
 
                         case R.id.itemHelp:
