@@ -28,7 +28,8 @@ import Helper.ItemListAdapter;
 import Model.Post;
 import Model.User;
 
-public class PostUserActivity extends AppCompatActivity {
+public class
+PostUserActivity extends AppCompatActivity {
 
     TextView postUserName, postUserBio , postUserLocation;
     ImageView postUserImage;

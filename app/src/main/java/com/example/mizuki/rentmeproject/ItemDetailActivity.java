@@ -9,8 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +21,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +37,7 @@ import java.util.Map;
 
 import Helper.GeocodeHandler;
 import Helper.TimeFormat;
+import Model.ChatRoom;
 import Model.Post;
 import Model.User;
 
@@ -39,11 +45,12 @@ public class ItemDetailActivity extends AppCompatActivity {
 
     ImageView itemImage,itemDetailUserImage;
     TextView itemTitle,itemPostTime,itemDescription,itemPrice,postUserName,itemDetailLocation;
+    Button sendMessage;
     Post post;
     User postUser,user;
 
 
-    private DatabaseReference userDB;
+    private DatabaseReference userDB, chatDB;
 
     @Override
     protected void onResume() {
@@ -65,9 +72,11 @@ public class ItemDetailActivity extends AppCompatActivity {
         itemDetailLocation = findViewById(R.id.itemDetailLocation);
         postUserName = findViewById(R.id.itemDetailUserName);
         itemDetailUserImage = findViewById(R.id.itemDetailUserImage);
+        sendMessage = findViewById(R.id.btnSendMessage);
 
         //firebase
         userDB = FirebaseDatabase.getInstance().getReference("Users");
+        chatDB = FirebaseDatabase.getInstance().getReference("Chat");
 
         Intent intent = getIntent();
         @SuppressWarnings("unchecked")
@@ -169,6 +178,80 @@ public class ItemDetailActivity extends AppCompatActivity {
                 userOb.putSerializable("userObject",user);
                 postUserPageIntent.putExtras(userOb);
                 ItemDetailActivity.this.startActivity(postUserPageIntent);
+            }
+        });
+
+        // set click event for sendMessage button
+        sendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // check if current user and post user has chat room between them
+
+                // get users id
+                String postUserId = user.getId();
+                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                chatDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        // if chat room exists
+                        boolean isExist = false;
+                        String chatRoomId = null;
+
+                        // loop the data and check if chat room exists
+                        for(DataSnapshot chat : dataSnapshot.getChildren()) {
+
+                            if((chat.child("user1Id").getValue().equals(postUserId) || chat.child("user1Id").getValue().equals(currentUserId)) &&
+                                    (chat.child("user2Id").getValue().equals(postUserId) || chat.child("user2Id").getValue().equals(currentUserId))
+                                    ){
+                                isExist = true;
+                                chatRoomId = chat.child("id").getValue().toString();
+                            }
+                        }
+
+                        if(isExist){
+                            // if already exists go to chat room
+
+                            Intent chatRoomPageIntent = new Intent(ItemDetailActivity.this, ChatRoomActivity.class);
+                            // pass corresponding chat room id
+                            chatRoomPageIntent.putExtra("chatRoomId", chatRoomId);
+                            ItemDetailActivity.this.startActivity(chatRoomPageIntent);
+
+                        }else {
+                            // get unique chat room id
+                            final String id = chatDB.push().getKey();
+
+                            // create new chart room
+                            ChatRoom chatRoom = new ChatRoom(id,currentUserId,postUserId);
+                            chatDB.child(id).setValue(chatRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // success handling
+                                    Toast.makeText(ItemDetailActivity.this, "Created new chat room", Toast.LENGTH_SHORT).show();
+
+                                    // jump to chat room
+                                    Intent chatRoomPageIntent = new Intent(ItemDetailActivity.this, ChatRoomActivity.class);
+                                    // pass corresponding chat room id
+                                    chatRoomPageIntent.putExtra("chatRoomId", id);
+                                    ItemDetailActivity.this.startActivity(chatRoomPageIntent);
+
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // fail handling
+                                    Toast.makeText(ItemDetailActivity.this, "Sorry something went wrong", Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 

@@ -47,7 +47,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".PostUserActivity" />
         <activity android:name=".OwnPostItemsActivity" />
-        <activity android:name=".PostEditActivity"></activity>
+        <activity android:name=".PostEditActivity" />
+        <activity android:name=".ChatRoomActivity"></activity>
     </application>
 
 </manifest>
