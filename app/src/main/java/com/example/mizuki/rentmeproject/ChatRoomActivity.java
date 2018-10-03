@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,18 +33,18 @@ import Model.Message;
 
 public class ChatRoomActivity extends AppCompatActivity {
 
-    Button sendBtn;
+    ImageButton sendBtn;
     EditText messageBody;
     ChatRoom currentChatRoom;
-
+    TextView otherUserNameView;
     ScrollView scroll;
-
+    String currentUserId,otherUserName;
     ListView listView;
     SimpleAdapter messageListAdapter;
 
     ArrayList<HashMap<String, Object>> messageList = new ArrayList<>();
 
-    private DatabaseReference messageDB,chatDB;
+    private DatabaseReference messageDB,chatDB,userDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +57,20 @@ public class ChatRoomActivity extends AppCompatActivity {
         messageBody = findViewById(R.id.chatBodyText);
         scroll = findViewById(R.id.chatScroll);
         listView = findViewById(R.id.messageListView);
+        otherUserNameView = findViewById(R.id.otherUserName);
+
+        // current  user id
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Intent i = getIntent();
         String chatRoomId = i.getStringExtra("chatRoomId");
+        otherUserName = i.getStringExtra("otherUserName");
+
+        otherUserNameView.setText(otherUserName);
 
         messageDB = FirebaseDatabase.getInstance().getReference("Message");
         chatDB = FirebaseDatabase.getInstance().getReference("Chat");
+        userDB = FirebaseDatabase.getInstance().getReference("Users");
 
         // make instance of custom simple adapter and put data in
         messageListAdapter = new MessageListAdapter(this,
@@ -140,10 +150,13 @@ public class ChatRoomActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String messageText = messageBody.getText().toString();
 
+                if(messageText.isEmpty()){
+                    Toast.makeText(ChatRoomActivity.this, "The message box is empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // get unique id for messageDB
                 final String id = messageDB.push().getKey();
-                // current  user id
-                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                 Message messageObj = new Message(
                         id,

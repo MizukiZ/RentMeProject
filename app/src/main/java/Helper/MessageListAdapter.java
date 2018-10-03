@@ -41,7 +41,6 @@ public class MessageListAdapter extends SimpleAdapter {
         LinearLayout bubbleLayout = v.findViewById(R.id.bubbleLayout);
         LinearLayout bubble = v.findViewById(R.id.bubble);
 
-
         // get message time stamp as string
         String timeStamp = String.valueOf(((Map<String, Long>)getItem(position)).get("created_at"));
         // use helper to format time

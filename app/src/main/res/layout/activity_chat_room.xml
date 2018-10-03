@@ -7,12 +7,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/appWhite"
+    >
+    <TextView
+        android:id="@+id/otherUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="userName"
+        android:gravity="center"
+        android:textSize="20dp"
+        />
+</LinearLayout>
 
     <ScrollView
         android:id="@+id/chatScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="60dp">
+        android:paddingTop="20dp"
+        android:paddingBottom="60dp"
+        >
 
     <Helper.ItemListView
         android:id="@+id/messageListView"
@@ -64,16 +80,22 @@
             android:maxLines="6"
             />
 
-        <Button
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@color/appYellow" />
+
+        <ImageButton
             android:id="@+id/chatSendBtn"
-            android:text="SEND"
-            android:textSize="14dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:layout_width="64dp"
+            android:layout_width="56dp"
             android:layout_height="48dp"
+            android:src="@drawable/send"
             android:gravity="center"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            android:background="@color/appWhite"
+            android:scaleType="fitCenter"
+            android:foreground="?android:attr/selectableItemBackground"
+            />
 
     </LinearLayout>
 

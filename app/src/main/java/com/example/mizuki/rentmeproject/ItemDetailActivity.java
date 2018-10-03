@@ -215,6 +215,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                             Intent chatRoomPageIntent = new Intent(ItemDetailActivity.this, ChatRoomActivity.class);
                             // pass corresponding chat room id
                             chatRoomPageIntent.putExtra("chatRoomId", chatRoomId);
+                            chatRoomPageIntent.putExtra("otherUserName", user.getUserName());
                             ItemDetailActivity.this.startActivity(chatRoomPageIntent);
 
                         }else {
@@ -233,6 +234,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                                     Intent chatRoomPageIntent = new Intent(ItemDetailActivity.this, ChatRoomActivity.class);
                                     // pass corresponding chat room id
                                     chatRoomPageIntent.putExtra("chatRoomId", id);
+                                    chatRoomPageIntent.putExtra("otherUserName", user.getUserName());
                                     ItemDetailActivity.this.startActivity(chatRoomPageIntent);
 
                                 }
