@@ -2,18 +2,18 @@ package Model;
 
 public class Message {
 
-    private String id, senderId, recieverId, charRoomId;
+    private String id, senderId, recieverId, chatRoomId;
     private String body;
     private Object created_at;
 
     public Message() {
     }
 
-    public Message(String id, String senderId, String recieverId, String charRoomId, String body, Object created_at) {
+    public Message(String id, String senderId, String recieverId, String chatRoomId, String body, Object created_at) {
         this.id = id;
         this.senderId = senderId;
         this.recieverId = recieverId;
-        this.charRoomId = charRoomId;
+        this.chatRoomId = chatRoomId;
         this.body = body;
         this.created_at = created_at;
     }
@@ -42,12 +42,12 @@ public class Message {
         this.recieverId = recieverId;
     }
 
-    public String getCharRoomId() {
-        return charRoomId;
+    public String getChatRoomId() {
+        return chatRoomId;
     }
 
-    public void setCharRoomId(String charRoomId) {
-        this.charRoomId = charRoomId;
+    public void getChatRoomId(String chatRoomId) {
+        this.chatRoomId = chatRoomId;
     }
 
     public String getBody() {

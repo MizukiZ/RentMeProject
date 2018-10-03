@@ -25,4 +25,12 @@ public class TimeFormat {
 
      return formatData;
     }
+
+    public String messageForm(){
+
+        SimpleDateFormat dataFormat = new SimpleDateFormat("HH:mm MM/dd ",Locale.US);
+        formatData = dataFormat.format(calendar.getTime());
+
+        return formatData;
+    }
 }
