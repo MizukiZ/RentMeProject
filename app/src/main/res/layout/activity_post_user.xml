@@ -141,7 +141,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnUpdate"
+            android:id="@+id/sendMessageBtn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/appGreen"

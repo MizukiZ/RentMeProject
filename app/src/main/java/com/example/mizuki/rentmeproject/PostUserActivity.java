@@ -7,11 +7,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +30,7 @@ import java.util.Map;
 
 import Helper.GeocodeHandler;
 import Helper.ItemListAdapter;
+import Model.ChatRoom;
 import Model.Post;
 import Model.User;
 
@@ -33,6 +39,9 @@ PostUserActivity extends AppCompatActivity {
 
     TextView postUserName, postUserBio , postUserLocation;
     ImageView postUserImage;
+    Button sendMessage;
+
+    private DatabaseReference chatDB;
 
     ListView listView;
     SimpleAdapter itemListAdapter;
@@ -58,11 +67,13 @@ PostUserActivity extends AppCompatActivity {
         postUserBio = findViewById(R.id.postUserBio);
         postUserLocation = findViewById(R.id.postUserLocatioin);
         postUserImage = findViewById(R.id.postUserImage);
+        sendMessage = findViewById(R.id.sendMessageBtn);
 
         listView = findViewById(R.id.postUserItemListView);
 
         // firebase
         db = FirebaseDatabase.getInstance().getReference();
+        chatDB = FirebaseDatabase.getInstance().getReference("Chat");
 
 
         // make instance of custom simple adapter and put data in
@@ -149,6 +160,79 @@ PostUserActivity extends AppCompatActivity {
                 Intent detailPageIntent = new Intent(PostUserActivity.this, ItemDetailActivity.class);
                 detailPageIntent.putExtra("itemObject", itemObject);
                 PostUserActivity.this.startActivity(detailPageIntent);
+            }
+        });
+
+        sendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // get users id
+                String postUserId = user.getId();
+                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                chatDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        // if chat room exists
+                        boolean isExist = false;
+                        String chatRoomId = null;
+
+                        // loop the data and check if chat room exists
+                        for(DataSnapshot chat : dataSnapshot.getChildren()) {
+
+                            if((chat.child("user1Id").getValue().equals(postUserId) || chat.child("user1Id").getValue().equals(currentUserId)) &&
+                                    (chat.child("user2Id").getValue().equals(postUserId) || chat.child("user2Id").getValue().equals(currentUserId))
+                                    ){
+                                isExist = true;
+                                chatRoomId = chat.child("id").getValue().toString();
+                            }
+                        }
+
+                        if(isExist){
+                            // if already exists go to chat room
+
+                            Intent chatRoomPageIntent = new Intent(PostUserActivity.this, ChatRoomActivity.class);
+                            // pass corresponding chat room id
+                            chatRoomPageIntent.putExtra("chatRoomId", chatRoomId);
+                            chatRoomPageIntent.putExtra("otherUserName", user.getUserName());
+                            PostUserActivity.this.startActivity(chatRoomPageIntent);
+
+                        }else {
+                            // get unique chat room id
+                            final String id = chatDB.push().getKey();
+
+                            // create new chart room
+                            ChatRoom chatRoom = new ChatRoom(id,currentUserId,postUserId);
+                            chatDB.child(id).setValue(chatRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // success handling
+                                    Toast.makeText(PostUserActivity.this, "Created new chat room", Toast.LENGTH_SHORT).show();
+
+                                    // jump to chat room
+                                    Intent chatRoomPageIntent = new Intent(PostUserActivity.this, ChatRoomActivity.class);
+                                    // pass corresponding chat room id
+                                    chatRoomPageIntent.putExtra("chatRoomId", id);
+                                    chatRoomPageIntent.putExtra("otherUserName", user.getUserName());
+                                    PostUserActivity.this.startActivity(chatRoomPageIntent);
+
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // fail handling
+                                    Toast.makeText(PostUserActivity.this, "Sorry something went wrong", Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
     }

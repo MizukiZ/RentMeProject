@@ -48,6 +48,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     Button sendMessage;
     Post post;
     User postUser,user;
+    String currentUserId;
 
 
     private DatabaseReference userDB, chatDB;
@@ -74,9 +75,12 @@ public class ItemDetailActivity extends AppCompatActivity {
         itemDetailUserImage = findViewById(R.id.itemDetailUserImage);
         sendMessage = findViewById(R.id.btnSendMessage);
 
+
         //firebase
         userDB = FirebaseDatabase.getInstance().getReference("Users");
         chatDB = FirebaseDatabase.getInstance().getReference("Chat");
+
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Intent intent = getIntent();
         @SuppressWarnings("unchecked")
@@ -153,6 +157,16 @@ public class ItemDetailActivity extends AppCompatActivity {
                 // set post user name
                 postUserName.setText(postUser.getUserName());
 
+                // disable buttons if this post is own post
+                if(currentUserId.equals(user.getId())){
+                    sendMessage.setEnabled(false);
+                    itemDetailUserImage.setEnabled(false);
+
+                    postUserName.setText("This is your own post");
+                }
+
+
+
                 // user image
                 Picasso.get()
                         .load(user.getImage())
@@ -189,7 +203,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
                 // get users id
                 String postUserId = user.getId();
-                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                 chatDB.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
