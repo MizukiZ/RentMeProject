@@ -357,7 +357,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
                         case R.id.itemMessageBox:
-                            Toast.makeText(HomeActivity.this, "MessageBox", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(HomeActivity.this, MessageBoxActivity.class));
                             return true;
 
                         case R.id.itemPostbox:

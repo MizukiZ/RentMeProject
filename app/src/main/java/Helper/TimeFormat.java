@@ -28,7 +28,7 @@ public class TimeFormat {
 
     public String messageForm(){
 
-        SimpleDateFormat dataFormat = new SimpleDateFormat("HH:mm MM/dd ",Locale.US);
+        SimpleDateFormat dataFormat = new SimpleDateFormat("HH:mm dd/MM ",Locale.US);
         formatData = dataFormat.format(calendar.getTime());
 
         return formatData;
