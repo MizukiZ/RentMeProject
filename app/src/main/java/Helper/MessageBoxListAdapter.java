@@ -67,10 +67,21 @@ public class MessageBoxListAdapter extends SimpleAdapter {
         String imageUrl = ((Map<String, String>)getItem(position)).get("userImage");
         String userName = ((Map<String, String>)getItem(position)).get("userName");
         String lastMsg = ((Map<String, String>)getItem(position)).get("lastMessage");
+        String msgTime = ((Map<String, String>)getItem(position)).get("messageTime");
 
-        // set user name
+
+
+        // set values
         userNameView.setText(userName);
         lastMessageBody.setText(lastMsg);
+
+        if(!msgTime.isEmpty()){
+            TimeFormat timeFormat = new TimeFormat(msgTime);
+            messageTime.setText(timeFormat.messageForm());
+        }else{
+            messageTime.setText("");
+        }
+
 
         if(imageUrl != null){
             // Picasso setting

@@ -38,7 +38,7 @@ public class MessageBoxActivity extends AppCompatActivity {
 
     User otherUser;
 
-    ArrayList<String> messageBodyList = new ArrayList<>();
+    ArrayList<Message> messageModelList = new ArrayList<>();
     ArrayList<HashMap<String, Object>> chatListData = new ArrayList<>();
 
     @Override
@@ -71,7 +71,7 @@ public class MessageBoxActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.child("Chat").getChildren()) {
 
                     // init list
-                    messageBodyList.clear();
+                    messageModelList.clear();
 
                     ChatRoom chatRoom = snapshot.getValue(ChatRoom.class);
 
@@ -88,17 +88,15 @@ public class MessageBoxActivity extends AppCompatActivity {
 
                             // choose only the corresponding message
                             if(message.getChatRoomId().equals(chatRoom.getId())){
-                                messageBodyList.add(message.getBody());
+                                messageModelList.add(message);
                             }
 
                         }
 
-                        if(!messageBodyList.isEmpty()){
-                            Log.d("Last Message", messageBodyList.get(messageBodyList.size()-1));
-                        }
 
-                        String lastMessage = !messageBodyList.isEmpty() ? messageBodyList.get(messageBodyList.size()-1) : "";
 
+                        String lastMessage = !messageModelList.isEmpty() ? messageModelList.get(messageModelList.size()-1).getBody() : "";
+                        String lastMessageTime = !messageModelList.isEmpty() ? messageModelList.get(messageModelList.size()-1).getCreated_at().toString() : "";
                         HashMap<String, Object> data = new HashMap<>();
                         data.put("id", chatRoom.getId());
                         data.put("user1Id", chatRoom.getUser1Id());
@@ -107,6 +105,7 @@ public class MessageBoxActivity extends AppCompatActivity {
                         data.put("userName", otherUser.getUserName());
                         data.put("lastMessage", lastMessage);
                         data.put("chatRoomId", chatRoom.getId());
+                        data.put("messageTime", lastMessageTime);
 
                         // set both original and chatListdata for adapter
                         chatListData.add(data);
