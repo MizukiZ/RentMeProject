@@ -66,6 +66,7 @@ public class OwnProfilePage extends AppCompatActivity {
     DatabaseReference userDbRef;
 
     android.app.AlertDialog updatingDialog;
+    User userModle;
 
     static final int AUTO_COMP_REQ_CODE = 1;
 
@@ -73,7 +74,6 @@ public class OwnProfilePage extends AppCompatActivity {
     Double lat,lon;
 
     boolean isEditMode;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,55 +104,71 @@ public class OwnProfilePage extends AppCompatActivity {
         Intent intent = getIntent();
         HashMap<String, Object> userData = (HashMap<String, Object>)intent.getSerializableExtra("user");
 
+        //set event for user db reference
+        userDbRef.child(userData.get("id").toString()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               userModle = dataSnapshot.getValue(User.class);
+
+                // set default data into filed
+
+                nameTxt.setText(userModle.getUserName());
+
+                if(userModle.getBio() != null){
+                    // there is bio
+                    bioTxt.setText(userModle.getBio());
+                }else{
+                    // there is no bio
+                }
+
+                if(userModle.getImage() != null) {
+                    // if there is a image
+
+
+                    Picasso.get()
+                            .load(userModle.getImage())
+                            .resize(500, 300)
+                            .placeholder(R.drawable.placeholder)
+                            .into(ownImg);
+                }else{
+
+                    // if there is no image, set place holder
+                    ownImg.setBackgroundResource(R.drawable.account);
+                }
+
+                if(userModle.getLocation() != null) {
+                    //  if there is a locaiton
+
+                    // cast object to map
+                    @SuppressWarnings("unchecked")
+                    Map<String, Double> location = (Map<String, Double>)userModle.getLocation();
+
+                    lat = location.get("lat");
+                    lon = location.get("lon");
+
+                    GeocodeHandler geocodeHandler = new GeocodeHandler(OwnProfilePage.this,lat,lon);
+
+                    locationTxt.setText(geocodeHandler.getPlaceName());
+
+                }else {
+                    // if there is no location
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         // make progress dialog and show
         updatingDialog = new SpotsDialog.Builder().setContext(OwnProfilePage.this)
                 .setMessage("Updating")
                 .build();
 
 
-        // set default data into filed
 
-        nameTxt.setText(userData.get("userName").toString());
-
-        if(userData.get("bio") != null){
-            // there is bio
-            bioTxt.setText(userData.get("bio").toString());
-        }else{
-            // there is no bio
-        }
-
-        if(userData.get("image") != null) {
-            // if there is a image
-
-
-            Picasso.get()
-                    .load(userData.get("image").toString())
-                    .resize(500, 300)
-                    .placeholder(R.drawable.placeholder)
-                    .into(ownImg);
-        }else{
-
-            // if there is no image, set place holder
-           ownImg.setBackgroundResource(R.drawable.account);
-        }
-
-        if(userData.get("location") != null) {
-        //  if there is a locaiton
-
-            // cast object to map
-        @SuppressWarnings("unchecked")
-        Map<String, Double> location = (Map<String, Double>)userData.get("location");
-
-        lat = location.get("lat");
-        lon = location.get("lon");
-
-            GeocodeHandler geocodeHandler = new GeocodeHandler(this,lat,lon);
-
-            locationTxt.setText(geocodeHandler.getPlaceName());
-        }else {
-            // if there is no location
-
-        }
 
         // set switch eventlistener
         editToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -389,4 +405,6 @@ public class OwnProfilePage extends AppCompatActivity {
 
         updateBtn.setEnabled(state);
     }
+
+
 }
