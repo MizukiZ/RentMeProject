@@ -27,7 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     Context context;
 
     TextView alreadyAccountLink;
-    Button btnRegister, btnCancel;
+    Button btnRegister;
     EditText edtName,edtEmail, edtPassword;
 
     // Firebase
@@ -50,7 +50,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         // init views
         alreadyAccountLink = findViewById(R.id.alreadyAccountLink);
-        btnCancel = findViewById(R.id.btnCancel);
         btnRegister = findViewById(R.id.btnRegister);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);

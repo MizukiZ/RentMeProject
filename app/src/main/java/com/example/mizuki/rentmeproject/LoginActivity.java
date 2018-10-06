@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Context context;
 
-    Button btnLogin, btnCancel;
+    Button btnLogin;
     EditText edtEmail, edtPassword;
     TextView noAccountLink;
 
@@ -48,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // init views
         noAccountLink = findViewById(R.id.noAccountLink);
-        btnCancel = findViewById(R.id.btnCancel);
         btnLogin = findViewById(R.id.btnLogin);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
