@@ -44,7 +44,7 @@ import Model.User;
 public class ItemDetailActivity extends AppCompatActivity {
 
     ImageView itemImage,itemDetailUserImage;
-    TextView itemTitle,itemPostTime,itemDescription,itemPrice,postUserName,itemDetailLocation;
+    TextView itemTitle,itemPostTime,itemDescription,itemPrice,postUserName,itemDetailLocation,rentedMessage;
     Button sendMessage;
     Post post;
     User postUser,user;
@@ -74,6 +74,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         postUserName = findViewById(R.id.itemDetailUserName);
         itemDetailUserImage = findViewById(R.id.itemDetailUserImage);
         sendMessage = findViewById(R.id.btnSendMessage);
+        rentedMessage = findViewById(R.id.itemDetailRented);
 
 
         //firebase
@@ -109,7 +110,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         GeocodeHandler geocodeHandler = new GeocodeHandler(this,location.get("lat"),location.get("lon"));
 
             itemDetailLocation.setText(geocodeHandler.getPlaceName());
-
 
 
         Picasso.get()
@@ -280,6 +280,17 @@ public class ItemDetailActivity extends AppCompatActivity {
         itemDescription.setText(post.getDescription());
 
         itemPrice.setText(post.getCost().toString());
+
+        if(post.isRented()){
+            // if the item is rented
+            rentedMessage.setText("Rented");
+            // set opacity for the rented item
+            itemImage.setAlpha(0.4f);
+        }else{
+            // if the item is not rented
+            rentedMessage.setText(null);
+            itemImage.setAlpha(1.0f);
+        }
 
     }
 }

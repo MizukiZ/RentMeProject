@@ -635,7 +635,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         ArrayList<HashMap<String, Object>> filterResult = new ArrayList<>();
-        ;
+
 
         // get filter helper instance with new originalItemListData
         ItemFilterHandler filterHelp = new ItemFilterHandler(originalItemListData);
