@@ -84,9 +84,11 @@ PostUserActivity extends AppCompatActivity {
                 new int[]{R.id.itemTitle, R.id.itemPrice}); // where to put the data
 
         // get post item the user posted
-        db.child("Post").orderByChild("user_id").equalTo(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.child("Post").orderByChild("user_id").equalTo(user.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                itemListData.clear();
 
                 // loop the data to generate item list array
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
