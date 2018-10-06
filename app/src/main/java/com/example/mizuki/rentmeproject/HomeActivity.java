@@ -366,7 +366,8 @@ public class HomeActivity extends AppCompatActivity {
                             return true;
 
                         case R.id.itemHelp:
-                            Toast.makeText(HomeActivity.this, "Help", Toast.LENGTH_SHORT).show();
+                            //  redirect to help page
+                            startActivity(new Intent(HomeActivity.this, HelpActivity.class));
                             return true;
 
                         case R.id.itemLogout:
