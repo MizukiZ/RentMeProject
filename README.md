@@ -3,7 +3,6 @@
 RentME
 
 ![alt text](https://github.com/MizukiZ/RentMeProject/blob/master/app/src/main/res/drawable/logo.png)
-)
 
 ## What is this
 
@@ -20,4 +19,5 @@ to provide the connection that both side user (renter and renter) can get benefi
 ## Future plans
 
 - Security system to protect renters
+
   User need to upload their identification and guarantor identification photo to be able to rent items via this application.
