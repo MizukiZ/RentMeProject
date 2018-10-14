@@ -1,7 +1,5 @@
 # Project Title
 
-RentME
-
 ![alt text](https://github.com/MizukiZ/RentMeProject/blob/master/app/src/main/res/drawable/logo.png)
 
 ## What is this
